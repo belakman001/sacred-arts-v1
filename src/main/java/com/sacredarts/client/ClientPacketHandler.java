@@ -15,7 +15,7 @@ public class ClientPacketHandler {
                 msg.getMadra(), msg.getMaxMadra(), msg.getMastery(), msg.getKills(),
                 msg.getCycledTotal(), msg.getIronBodyId(), msg.hasGoldsign(),
                 msg.isCycling(), msg.getLevel(), msg.getLevelXp(), msg.getXpForNext(),
-                msg.getStageMaxLevel());
+                msg.getStageMaxLevel(), msg.isCopperSightEnabled());
     }
 
     /** Right-click with the Foundation Manual: choose a Path, or review stats if enrolled. */

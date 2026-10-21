@@ -47,8 +47,8 @@ public class AdvancementHandler {
             checkAdvancement(player, data);
         }
 
-        // Copper Sight: hostile entities glow through walls.
-        if (data.getStage().atLeast(Stage.COPPER) && time % 100 == 0) {
+        // Copper Sight: hostile entities glow through walls (toggle with G).
+        if (data.getStage().atLeast(Stage.COPPER) && data.isCopperSightEnabled() && time % 100 == 0) {
             var pos = player.position();
             AABB box = new AABB(pos.x - 24, pos.y - 24, pos.z - 24, pos.x + 24, pos.y + 24, pos.z + 24);
             for (LivingEntity e : player.level().getEntitiesOfClass(LivingEntity.class, box,

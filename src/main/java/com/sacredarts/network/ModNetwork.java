@@ -42,6 +42,10 @@ public class ModNetwork {
                 SelectPathPacket::encode,
                 SelectPathPacket::new,
                 SelectPathPacket::handle);
+        CHANNEL.registerMessage(id++, ToggleCopperSightPacket.class,
+                ToggleCopperSightPacket::encode,
+                ToggleCopperSightPacket::new,
+                ToggleCopperSightPacket::handle);
     }
 
     /** Push the player's full sacred artist state to their client. */

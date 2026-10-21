@@ -17,6 +17,7 @@ public class SacredArtist implements ISacredArtist {
     private IronBody ironBody = IronBody.NONE;
     private boolean goldsign = false;
     private boolean cycling = false;
+    private boolean copperSightEnabled = true;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -86,6 +87,9 @@ public class SacredArtist implements ISacredArtist {
     @Override public boolean isCycling() { return cycling; }
     @Override public void setCycling(boolean cycling) { this.cycling = cycling; }
 
+    @Override public boolean isCopperSightEnabled() { return copperSightEnabled; }
+    @Override public void setCopperSightEnabled(boolean enabled) { this.copperSightEnabled = enabled; }
+
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
@@ -100,6 +104,7 @@ public class SacredArtist implements ISacredArtist {
         tag.putInt("kills", kills);
         tag.putString("ironBody", ironBody.getId());
         tag.putBoolean("goldsign", goldsign);
+        tag.putBoolean("copperSightEnabled", copperSightEnabled);
         return tag;
     }
 
@@ -116,6 +121,7 @@ public class SacredArtist implements ISacredArtist {
         kills = tag.getInt("kills");
         ironBody = IronBody.byId(tag.getString("ironBody"));
         goldsign = tag.getBoolean("goldsign");
+        copperSightEnabled = !tag.contains("copperSightEnabled") || tag.getBoolean("copperSightEnabled");
         cycling = false;
     }
 

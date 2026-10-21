@@ -21,12 +21,13 @@ public class ClientData {
     public static int levelXp = 0;
     public static int xpForNext = 100;
     public static int stageMaxLevel = 5;
+    public static boolean copperSightEnabled = true;
 
     public static void update(boolean enrolled, String pathId, String stageId,
                               double madra, double maxMadra, int mastery, int kills,
                               double cycledTotal, String ironBodyId, boolean goldsign,
                               boolean cycling, int level, int levelXp, int xpForNext,
-                              int stageMaxLevel) {
+                              int stageMaxLevel, boolean copperSightEnabled) {
         ClientData.enrolled = enrolled;
         ClientData.pathId = pathId;
         ClientData.stageId = stageId;
@@ -42,5 +43,6 @@ public class ClientData {
         ClientData.levelXp = levelXp;
         ClientData.xpForNext = xpForNext;
         ClientData.stageMaxLevel = stageMaxLevel;
+        ClientData.copperSightEnabled = copperSightEnabled;
     }
 }

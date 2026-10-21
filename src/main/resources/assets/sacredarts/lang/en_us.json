@@ -151,5 +151,9 @@
   "screen.sacredarts.tab_stats": "Stats",
   "screen.sacredarts.tab_techniques": "Techniques",
   "stats.sacredarts.level": "Level",
-  "stats.sacredarts.madra_unit": "madra"
+  "stats.sacredarts.madra_unit": "madra",
+  "key.sacredarts.copper_sight": "Toggle Copper Sight",
+  "message.sacredarts.copper_sight_on": "Copper Sight enabled",
+  "message.sacredarts.copper_sight_off": "Copper Sight disabled",
+  "stats.sacredarts.copper_sight": "Copper Sight"
 }

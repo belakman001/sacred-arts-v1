@@ -54,4 +54,7 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
 
     boolean isCycling();
     void setCycling(boolean cycling);
+
+    boolean isCopperSightEnabled();
+    void setCopperSightEnabled(boolean enabled);
 }

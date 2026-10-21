@@ -159,6 +159,8 @@ v0.3 changes (2026-10-21): FIXED root cause of silent enrollment failure — cap
 
 v0.4 changes (2026-10-21): level system — level 1-100, XP from cycling/kills/casts (config-tunable), stage caps (Foundation 5, Copper 10, Iron 20, Jade 25, Lowgold 35, Highgold 60, Truegold 100). All techniques unlocked from enrollment; power scales with level (1 + (level-1) * powerPerLevel). K toggles the stats menu. Stats menu redesigned with Stats/Techniques tabs, level XP bar, advancement progress, and per-technique descriptions. Fox Fire reworked: sprays ender-dragon fire (cone) instead of fireballs. New commands: /sacredarts setlevel, /sacredarts setstage.
 
+v0.5 changes (2026-10-21): Copper Sight toggle (G keybind + server packet, persisted in NBT, shown in stats menu). Fixed K not closing the menu: IN_GAME keybinds don't fire while a screen is open, so StatsScreen now handles its own close key via keyPressed.
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

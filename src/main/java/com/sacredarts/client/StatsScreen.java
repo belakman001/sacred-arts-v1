@@ -87,6 +87,9 @@ public class StatsScreen extends Screen {
                 + IronBody.byId(ClientData.ironBodyId).getDisplayName().getString());
         y = line(g, x, y, label("stats.sacredarts.goldsign") + ": "
                 + label(ClientData.goldsign ? "stats.sacredarts.yes" : "stats.sacredarts.no"));
+        y = line(g, x, y, label("stats.sacredarts.copper_sight") + ": "
+                + label(ClientData.copperSightEnabled ? "stats.sacredarts.yes" : "stats.sacredarts.no")
+                + " §7(G)");
         y += 8;
 
         y = line(g, x, y, "§l" + label("stats.sacredarts.to_advance"));
@@ -152,6 +155,17 @@ public class StatsScreen extends Screen {
             case 2 -> KeyBindings.TECH_3.getKey().getDisplayName().getString();
             default -> KeyBindings.TECH_4.getKey().getDisplayName().getString();
         };
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // K toggles the menu closed. (The IN_GAME keybind can't fire while a
+        // screen is open, so the screen handles its own close key.)
+        if (keyCode == KeyBindings.MENU.getKey().getValue()) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

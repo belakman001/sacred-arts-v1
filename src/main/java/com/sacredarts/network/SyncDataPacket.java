@@ -24,6 +24,7 @@ public class SyncDataPacket {
     private final int levelXp;
     private final int xpForNext;
     private final int stageMaxLevel;
+    private final boolean copperSightEnabled;
 
     public SyncDataPacket(ISacredArtist data) {
         this.enrolled = data.isEnrolled();
@@ -41,6 +42,7 @@ public class SyncDataPacket {
         this.levelXp = data.getLevelXp();
         this.xpForNext = com.sacredarts.config.SacredArtsConfig.LEVEL_XP_PER_LEVEL.get();
         this.stageMaxLevel = data.getStage().getMaxLevel();
+        this.copperSightEnabled = data.isCopperSightEnabled();
     }
 
     public SyncDataPacket(FriendlyByteBuf buf) {
@@ -59,6 +61,7 @@ public class SyncDataPacket {
         this.levelXp = buf.readInt();
         this.xpForNext = buf.readInt();
         this.stageMaxLevel = buf.readInt();
+        this.copperSightEnabled = buf.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -77,6 +80,7 @@ public class SyncDataPacket {
         buf.writeInt(levelXp);
         buf.writeInt(xpForNext);
         buf.writeInt(stageMaxLevel);
+        buf.writeBoolean(copperSightEnabled);
     }
 
     public static void handle(SyncDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -99,4 +103,5 @@ public class SyncDataPacket {
     public int getLevelXp() { return levelXp; }
     public int getXpForNext() { return xpForNext; }
     public int getStageMaxLevel() { return stageMaxLevel; }
+    public boolean isCopperSightEnabled() { return copperSightEnabled; }
 }

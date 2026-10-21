@@ -48,11 +48,12 @@ public class ClientEvents {
                 ModNetwork.CHANNEL.sendToServer(new CastTechniquePacket(3, sneak));
             }
             if (KeyBindings.MENU.consumeClick()) {
-                if (mc.screen instanceof StatsScreen) {
-                    mc.setScreen(null); // K toggles the menu closed
-                } else {
-                    ClientPacketHandler.openStatsScreen();
-                }
+                // Opening only — closing is handled by StatsScreen.keyPressed,
+                // because IN_GAME keybinds don't fire while a screen is open.
+                ClientPacketHandler.openStatsScreen();
+            }
+            if (KeyBindings.COPPER_SIGHT.consumeClick()) {
+                ModNetwork.CHANNEL.sendToServer(new ToggleCopperSightPacket());
             }
         }
 
