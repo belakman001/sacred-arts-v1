@@ -136,7 +136,20 @@ Twin Stars as an advanced dual-core mechanic.
 
 - Teams / friendly-fire toggle, optional unique-Path-per-player limit (server config).
 
-## Technical notes (Forge 1.20.1)
+## Build status (2026-10-21)
+
+MVP core systems implemented and committed (35 Java files, zero syntax errors):
+- Player capability: stage, Path, mastery, madra pool, Iron Body, Goldsign, cycling
+- Madra: passive regen + hold-to-cycle, HUD bar overlay
+- 6 Paths x 4 techniques + ultimate (30 total), keybind cast (V/B/N/M, sneak+M = ultimate)
+- Advancement Foundation -> Truegold with trials; Copper Sight, Iron Body choice screen, Goldsign
+- Items: Foundation Manual (random Path enrollment), Remnant Core (reroll), Madra Pill
+- Recipes, full en_us lang, server config, GitHub Actions cloud build
+- Not yet in: Remnant mobs / Tyrant boss, Dreadgods, iconic weapons, Dross, Thousand-Mile Cloud,
+  structures, in-game guide menu, Curios trinket integration
+
+Next milestones: (1) cloud-build verification via GitHub Actions, (2) Remnant mob family +
+Remnant Tyrant boss, (3) iconic weapons batch 1 (scissors, Wintersteel blade, hunger arm, Eclipse).
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).
 - Curios API optional integration for relic/belt trinket slots (Forge-only — one more

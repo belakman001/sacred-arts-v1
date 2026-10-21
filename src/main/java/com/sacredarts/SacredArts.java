@@ -1,16 +1,33 @@
 package com.sacredarts;
 
 import com.mojang.logging.LogUtils;
+import com.sacredarts.advancement.AdvancementHandler;
+import com.sacredarts.config.SacredArtsConfig;
+import com.sacredarts.data.ModCapabilities;
+import com.sacredarts.data.SacredArtistProvider;
+import com.sacredarts.item.ModItems;
+import com.sacredarts.network.ModNetwork;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,13 +37,12 @@ import org.slf4j.Logger;
 /**
  * Sacred Arts — a Cradle-inspired cultivation mod.
  *
- * Systems roadmap (packages to be added under com.sacredarts):
- *   advancement — Foundation -> Copper -> Iron -> Jade -> Lowgold -> Highgold
- *                 -> Truegold -> Underlord -> Overlord -> Archlord -> Sage/Herald -> Monarch
- *   madra       — madra aspects (blood, dream, fire, sword, ...) and cycling
- *   path        — Paths (Black Flame, Twin Stars, Endless Sword, ...) granting techniques
- *   technique   — Striker / Ruler / Forger / Enforcer techniques bound to keys/items
- *   item/block  — sacred instruments, scripted constructs, iconic weapons
+ * Systems:
+ *   advancement — Foundation -> ... -> Monarch stage-ups with trials
+ *   data        — per-player capability: stage, path, mastery, madra, iron body
+ *   technique   — Striker / Enforcer / Ruler / Forger techniques per Path
+ *   network     — keybind -> server technique casting, cycling, iron body choice
+ *   client      — keybinds, madra HUD, iron body screen
  */
 @Mod(SacredArts.MODID)
 public class SacredArts {
@@ -35,18 +51,19 @@ public class SacredArts {
 
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<Item> ITEMS = ModItems.ITEMS;
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final RegistryObject<CreativeModeTab> SACRED_ARTS_TAB =
             CREATIVE_MODE_TABS.register("sacred_arts", () -> CreativeModeTab.builder()
                     .withTabsBefore(CreativeModeTabs.COMBAT)
-                    .icon(() -> new ItemStack(net.minecraft.world.item.Items.BLAZE_POWDER))
+                    .icon(() -> new ItemStack(ModItems.FOUNDATION_MANUAL.get()))
                     .title(Component.translatable("itemGroup.sacredarts"))
                     .displayItems((parameters, output) -> {
-                        // Items register themselves into this tab as they are added.
+                        output.accept(ModItems.FOUNDATION_MANUAL.get());
+                        output.accept(ModItems.REMNANT_CORE.get());
+                        output.accept(ModItems.MADRA_PILL.get());
                     })
                     .build());
 
@@ -57,8 +74,50 @@ public class SacredArts {
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
+        ModNetwork.register();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SacredArtsConfig.SPEC);
+
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addGenericListener(Player.class, this::onAttachCapabilities);
 
         LOGGER.info("Sacred Arts stirs. The Way opens.");
+    }
+
+    private void onAttachCapabilities(AttachCapabilitiesEvent<Player> event) {
+        SacredArtistProvider provider = new SacredArtistProvider();
+        event.addCapability(new ResourceLocation(MODID, "sacred_artist"), provider);
+        event.addListener(provider::invalidate);
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+        if (event.player instanceof ServerPlayer sp) {
+            sp.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
+                if (data.isEnrolled()) {
+                    AdvancementHandler.tick(sp, data);
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDeath(LivingDeathEvent event) {
+        if (event.getSource().getEntity() instanceof ServerPlayer sp && event.getEntity() instanceof Enemy) {
+            sp.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
+                if (!data.isEnrolled()) return;
+                data.addKill();
+                data.addMastery(SacredArtsConfig.MASTERY_PER_KILL.get());
+            });
+        }
+    }
+
+    /** Mastery is never lost on death — copy the data to the respawned player. */
+    @SubscribeEvent
+    public void onPlayerClone(PlayerEvent.Clone event) {
+        if (!event.isWasDeath()) return;
+        event.getOriginal().getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(oldData ->
+                event.getEntity().getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(newData ->
+                        newData.deserializeNBT(oldData.serializeNBT())));
     }
 }

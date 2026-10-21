@@ -1,0 +1,106 @@
+package com.sacredarts.data;
+
+import com.sacredarts.advancement.Stage;
+import com.sacredarts.path.Path;
+import net.minecraft.nbt.CompoundTag;
+
+public class SacredArtist implements ISacredArtist {
+    private boolean enrolled = false;
+    private Stage stage = Stage.FOUNDATION;
+    private Path path = Path.BLACK_FLAME;
+    private int mastery = 0;
+    private double madra = 0;
+    private double cycledTotal = 0;
+    private int kills = 0;
+    private IronBody ironBody = IronBody.NONE;
+    private boolean goldsign = false;
+    private boolean cycling = false;
+
+    @Override public boolean isEnrolled() { return enrolled; }
+
+    @Override public Stage getStage() { return stage; }
+    @Override public void setStage(Stage stage) {
+        this.stage = stage;
+        this.enrolled = true;
+        if (madra > getMaxMadra()) madra = getMaxMadra();
+    }
+
+    @Override public Path getPath() { return path; }
+    @Override public void setPath(Path path) { this.path = path; }
+
+    @Override public int getMastery() { return mastery; }
+    @Override public void addMastery(int amount) { this.mastery = Math.max(0, mastery + amount); }
+    @Override public void setMastery(int mastery) { this.mastery = Math.max(0, mastery); }
+
+    @Override public double getMadra() { return madra; }
+    @Override public double getMaxMadra() { return stage.getMaxMadra(); }
+    @Override public void setMadra(double madra) {
+        this.madra = Math.max(0, Math.min(madra, getMaxMadra()));
+    }
+
+    @Override public boolean spendMadra(double amount) {
+        if (madra < amount) return false;
+        madra -= amount;
+        return true;
+    }
+
+    @Override public double getCycledTotal() { return cycledTotal; }
+    @Override public void addCycled(double amount) {
+        this.cycledTotal += amount;
+        setMadra(madra + amount);
+    }
+
+    @Override public int getKills() { return kills; }
+    @Override public void addKill() { this.kills++; }
+
+    @Override public IronBody getIronBody() { return ironBody; }
+    @Override public void setIronBody(IronBody body) { this.ironBody = body; }
+
+    @Override public boolean hasGoldsign() { return goldsign; }
+    @Override public void setGoldsign(boolean goldsign) { this.goldsign = goldsign; }
+
+    @Override public boolean isCycling() { return cycling; }
+    @Override public void setCycling(boolean cycling) { this.cycling = cycling; }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putBoolean("enrolled", enrolled);
+        tag.putString("stage", stage.getId());
+        tag.putString("path", path.getId());
+        tag.putInt("mastery", mastery);
+        tag.putDouble("madra", madra);
+        tag.putDouble("cycledTotal", cycledTotal);
+        tag.putInt("kills", kills);
+        tag.putString("ironBody", ironBody.getId());
+        tag.putBoolean("goldsign", goldsign);
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag) {
+        enrolled = tag.getBoolean("enrolled");
+        stage = Stage.byId(tag.getString("stage"));
+        path = Path.byId(tag.getString("path"));
+        mastery = tag.getInt("mastery");
+        madra = tag.getDouble("madra");
+        cycledTotal = tag.getDouble("cycledTotal");
+        kills = tag.getInt("kills");
+        ironBody = IronBody.byId(tag.getString("ironBody"));
+        goldsign = tag.getBoolean("goldsign");
+        cycling = false;
+    }
+
+    public void enroll(Path path) {
+        this.enrolled = true;
+        this.path = path;
+        this.stage = Stage.FOUNDATION;
+        this.mastery = 0;
+        this.madra = getMaxMadra();
+        this.cycledTotal = 0;
+        this.kills = 0;
+        this.ironBody = IronBody.NONE;
+        this.goldsign = false;
+        this.cycling = false;
+    }
+}
