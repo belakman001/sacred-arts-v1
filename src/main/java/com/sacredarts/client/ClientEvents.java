@@ -4,6 +4,7 @@ import com.sacredarts.SacredArts;
 import com.sacredarts.network.CastTechniquePacket;
 import com.sacredarts.network.CyclePacket;
 import com.sacredarts.network.ModNetwork;
+import com.sacredarts.network.ToggleCopperSightPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
