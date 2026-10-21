@@ -2,38 +2,37 @@ package com.sacredarts.network;
 
 import com.sacredarts.SacredArts;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
+/** 1.20.1-style simple channel (NetworkRegistry, not the newer ChannelBuilder API). */
 public class ModNetwork {
-    public static final SimpleChannel CHANNEL = ChannelBuilder
-            .named(new ResourceLocation(SacredArts.MODID, "main"))
-            .networkProtocolVersion(1)
-            .clientAcceptedVersions((status, version) -> true)
-            .serverAcceptedVersions((status, version) -> true)
-            .simpleChannel();
+    private static final String PROTOCOL_VERSION = "1";
+
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(SacredArts.MODID, "main"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );
 
     public static void register() {
         int id = 0;
-        CHANNEL.messageBuilder(CastTechniquePacket.class, id++)
-                .encoder(CastTechniquePacket::encode)
-                .decoder(CastTechniquePacket::new)
-                .consumerMainThread(CastTechniquePacket::handle)
-                .add();
-        CHANNEL.messageBuilder(CyclePacket.class, id++)
-                .encoder(CyclePacket::encode)
-                .decoder(CyclePacket::new)
-                .consumerMainThread(CyclePacket::handle)
-                .add();
-        CHANNEL.messageBuilder(SelectIronBodyPacket.class, id++)
-                .encoder(SelectIronBodyPacket::encode)
-                .decoder(SelectIronBodyPacket::new)
-                .consumerMainThread(SelectIronBodyPacket::handle)
-                .add();
-        CHANNEL.messageBuilder(OpenIronBodyPacket.class, id++)
-                .encoder(OpenIronBodyPacket::encode)
-                .decoder(OpenIronBodyPacket::new)
-                .consumerMainThread(OpenIronBodyPacket::handle)
-                .add();
+        CHANNEL.registerMessage(id++, CastTechniquePacket.class,
+                CastTechniquePacket::encode,
+                CastTechniquePacket::new,
+                CastTechniquePacket::handle);
+        CHANNEL.registerMessage(id++, CyclePacket.class,
+                CyclePacket::encode,
+                CyclePacket::new,
+                CyclePacket::handle);
+        CHANNEL.registerMessage(id++, SelectIronBodyPacket.class,
+                SelectIronBodyPacket::encode,
+                SelectIronBodyPacket::new,
+                SelectIronBodyPacket::handle);
+        CHANNEL.registerMessage(id++, OpenIronBodyPacket.class,
+                OpenIronBodyPacket::encode,
+                OpenIronBodyPacket::new,
+                OpenIronBodyPacket::handle);
     }
 }

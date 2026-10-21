@@ -2,7 +2,9 @@ package com.sacredarts.network;
 
 import com.sacredarts.client.ClientPacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 /** Server -> client: open the Iron Body choice screen. */
 public class OpenIronBodyPacket {
@@ -13,8 +15,8 @@ public class OpenIronBodyPacket {
 
     public void encode(FriendlyByteBuf buf) {}
 
-    public void handle(CustomPayloadEvent.Context ctx) {
-        ctx.enqueueWork(ClientPacketHandler::openIronBodyScreen);
-        ctx.setPacketHandled(true);
+    public static void handle(OpenIronBodyPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(ClientPacketHandler::openIronBodyScreen);
+        ctx.get().setPacketHandled(true);
     }
 }

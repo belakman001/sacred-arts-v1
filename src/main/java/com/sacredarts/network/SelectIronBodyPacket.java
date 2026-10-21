@@ -7,9 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /** Client -> server: player chose their Iron Body. */
 public class SelectIronBodyPacket {
@@ -29,14 +30,14 @@ public class SelectIronBodyPacket {
         buf.writeUtf(body.getId());
     }
 
-    public void handle(CustomPayloadEvent.Context ctx) {
-        ctx.enqueueWork(() -> {
-            ServerPlayer player = ctx.getSender();
+    public static void handle(SelectIronBodyPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
             if (player == null) return;
             player.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(d -> {
                 if (d.getIronBody() != IronBody.NONE) return; // already chosen — permanent
-                d.setIronBody(body);
-                if (body == IronBody.OAKHEART) {
+                d.setIronBody(msg.body);
+                if (msg.body == IronBody.OAKHEART) {
                     var attr = player.getAttribute(Attributes.MAX_HEALTH);
                     if (attr != null && attr.getModifier(OAKHEART_ID) == null) {
                         attr.addPermanentModifier(new AttributeModifier(
@@ -45,9 +46,9 @@ public class SelectIronBodyPacket {
                     }
                 }
                 player.displayClientMessage(
-                        Component.translatable("message.sacredarts.iron_body_chosen", body.getDisplayName()), false);
+                        Component.translatable("message.sacredarts.iron_body_chosen", msg.body.getDisplayName()), false);
             });
         });
-        ctx.setPacketHandled(true);
+        ctx.get().setPacketHandled(true);
     }
 }

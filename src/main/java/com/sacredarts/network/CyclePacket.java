@@ -3,7 +3,9 @@ package com.sacredarts.network;
 import com.sacredarts.data.ModCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 /** Client -> server: cycling key state changed. */
 public class CyclePacket {
@@ -21,13 +23,13 @@ public class CyclePacket {
         buf.writeBoolean(cycling);
     }
 
-    public void handle(CustomPayloadEvent.Context ctx) {
-        ctx.enqueueWork(() -> {
-            ServerPlayer player = ctx.getSender();
+    public static void handle(CyclePacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
             if (player != null) {
-                player.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(d -> d.setCycling(cycling));
+                player.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(d -> d.setCycling(msg.cycling));
             }
         });
-        ctx.setPacketHandled(true);
+        ctx.get().setPacketHandled(true);
     }
 }

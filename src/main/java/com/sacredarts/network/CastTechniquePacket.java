@@ -3,7 +3,9 @@ package com.sacredarts.network;
 import com.sacredarts.technique.TechniqueHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 /** Client -> server: cast technique in slot 0-3. Sneak + slot 3 = ultimate. */
 public class CastTechniquePacket {
@@ -25,13 +27,13 @@ public class CastTechniquePacket {
         buf.writeBoolean(sneaking);
     }
 
-    public void handle(CustomPayloadEvent.Context ctx) {
-        ctx.enqueueWork(() -> {
-            ServerPlayer player = ctx.getSender();
+    public static void handle(CastTechniquePacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
             if (player != null) {
-                TechniqueHandler.castSlot(player, slot, sneaking);
+                TechniqueHandler.castSlot(player, msg.slot, msg.sneaking);
             }
         });
-        ctx.setPacketHandled(true);
+        ctx.get().setPacketHandled(true);
     }
 }

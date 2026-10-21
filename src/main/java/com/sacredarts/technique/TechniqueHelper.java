@@ -107,7 +107,7 @@ public final class TechniqueHelper {
         if (targets.isEmpty()) targets = targetsAround(player, 12);
         for (int i = 0; i < count; i++) {
             LivingEntity target = targets.isEmpty() ? null : targets.get(i % targets.size());
-            ShulkerBullet bullet = new ShulkerBullet(player.level(), player, target, Direction.UP);
+            ShulkerBullet bullet = new ShulkerBullet(player.level(), player, target, Direction.Axis.Y);
             Vec3 eye = player.getEyePosition();
             bullet.setPos(eye.x, eye.y - 0.5 + (i * 0.3), eye.z);
             player.level().addFreshEntity(bullet);
