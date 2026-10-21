@@ -48,7 +48,6 @@ public class ClientEvents {
                 ModNetwork.CHANNEL.sendToServer(new CastTechniquePacket(3, sneak));
             }
             if (KeyBindings.MENU.consumeClick()) {
-                Minecraft mc = Minecraft.getInstance();
                 if (mc.screen instanceof StatsScreen) {
                     mc.setScreen(null); // K toggles the menu closed
                 } else {

@@ -130,8 +130,8 @@ public final class TechniqueHelper {
                 hurt(e, player, damage);
             }
         }
-        level.playSound(null, player.blockPosition(), SoundEvents.ENTITY_ENDER_DRAGON_SHOOT,
-                SoundSource.PLAYERS, 0.8f, 1.2f);
+        level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
+                SoundSource.PLAYERS, 0.8f, 0.7f);
     }
 
     /** Lingering poison cloud at the aimed point. */
