@@ -34,5 +34,20 @@ public class ModNetwork {
                 OpenIronBodyPacket::encode,
                 OpenIronBodyPacket::new,
                 OpenIronBodyPacket::handle);
+        CHANNEL.registerMessage(id++, SyncDataPacket.class,
+                SyncDataPacket::encode,
+                SyncDataPacket::new,
+                SyncDataPacket::handle);
+        CHANNEL.registerMessage(id++, SelectPathPacket.class,
+                SelectPathPacket::encode,
+                SelectPathPacket::new,
+                SelectPathPacket::handle);
+    }
+
+    /** Push the player's full sacred artist state to their client. */
+    public static void syncPlayer(net.minecraft.server.level.ServerPlayer player) {
+        player.getCapability(com.sacredarts.data.ModCapabilities.SACRED_ARTIST).ifPresent(data ->
+                CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
+                        new SyncDataPacket(data)));
     }
 }

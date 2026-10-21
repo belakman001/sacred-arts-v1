@@ -47,6 +47,7 @@ public class SelectIronBodyPacket {
                 }
                 player.displayClientMessage(
                         Component.translatable("message.sacredarts.iron_body_chosen", msg.body.getDisplayName()), false);
+                ModNetwork.syncPlayer(player);
             });
         });
         ctx.get().setPacketHandled(true);

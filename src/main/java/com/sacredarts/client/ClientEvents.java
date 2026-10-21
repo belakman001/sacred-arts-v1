@@ -47,6 +47,9 @@ public class ClientEvents {
             } else if (KeyBindings.TECH_4.consumeClick()) {
                 ModNetwork.CHANNEL.sendToServer(new CastTechniquePacket(3, sneak));
             }
+            if (KeyBindings.MENU.consumeClick()) {
+                ClientPacketHandler.openStatsScreen();
+            }
         }
 
         @SubscribeEvent

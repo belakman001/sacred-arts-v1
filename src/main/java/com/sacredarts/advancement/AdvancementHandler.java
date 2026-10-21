@@ -64,6 +64,11 @@ public class AdvancementHandler {
         } else if (data.getIronBody() == IronBody.RAINDROP && time % 200 == 0) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 220, 0, false, false, true));
         }
+
+        // Keep the client's HUD and menus fresh.
+        if (time % 40 == 0) {
+            ModNetwork.syncPlayer(player);
+        }
     }
 
     private static void checkAdvancement(ServerPlayer player, ISacredArtist data) {
@@ -99,5 +104,6 @@ public class AdvancementHandler {
             player.displayClientMessage(Component.translatable("message.sacredarts.goldsign",
                     Component.translatable("path.sacredarts." + data.getPath().getId() + ".goldsign")), false);
         }
+        ModNetwork.syncPlayer(player);
     }
 }

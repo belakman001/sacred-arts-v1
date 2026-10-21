@@ -143,13 +143,17 @@ MVP core systems implemented and committed (35 Java files, zero syntax errors):
 - Madra: passive regen + hold-to-cycle, HUD bar overlay
 - 6 Paths x 4 techniques + ultimate (30 total), keybind cast (V/B/N/M, sneak+M = ultimate)
 - Advancement Foundation -> Truegold with trials; Copper Sight, Iron Body choice screen, Goldsign
-- Items: Foundation Manual (random Path enrollment), Remnant Core (reroll), Madra Pill
+- Items: Foundation Manual (opens Path selection menu — choose your Path, consumes the manual), Remnant Core (Path switch), Madra Pill
+- Sacred Arts menu (K): Path, stage, madra/mastery/kills, Iron Body, Goldsign, advancement requirement, technique list with lock states
+- Server→client data sync (login, on change, every 2s); item textures via vanilla placeholders; /sacredarts status|enroll debug commands
 - Recipes, full en_us lang, server config, GitHub Actions cloud build
 - Not yet in: Remnant mobs / Tyrant boss, Dreadgods, iconic weapons, Dross, Thousand-Mile Cloud,
   structures, in-game guide menu, Curios trinket integration
 
-Next milestones: (1) cloud-build verification via GitHub Actions, (2) Remnant mob family +
+Next milestones: (1) playtest v0.2 (Path menu, stats menu, sync) and fix what's actually broken, (2) Remnant mob family +
 Remnant Tyrant boss, (3) iconic weapons batch 1 (scissors, Wintersteel blade, hunger arm, Eclipse).
+
+v0.2 changes (2026-10-21): enrollment changed from random Path assignment to player choice via selection menu (playtest feedback); working jar v0.1.0 delivered to Kaleb and first cloud build compiled clean after 1.20.1 API fixes.
 
 ## Technical notes (Forge 1.20.1)
 

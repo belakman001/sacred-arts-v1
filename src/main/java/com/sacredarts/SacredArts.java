@@ -2,6 +2,7 @@ package com.sacredarts;
 
 import com.mojang.logging.LogUtils;
 import com.sacredarts.advancement.AdvancementHandler;
+import com.sacredarts.command.SacredArtsCommand;
 import com.sacredarts.config.SacredArtsConfig;
 import com.sacredarts.data.ModCapabilities;
 import com.sacredarts.data.SacredArtistProvider;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -118,5 +120,18 @@ public class SacredArts {
         event.getOriginal().getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(oldData ->
                 event.getEntity().getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(newData ->
                         newData.deserializeNBT(oldData.serializeNBT())));
+    }
+
+    /** Push fresh state to the client on login so the HUD and menus are correct. */
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer sp) {
+            ModNetwork.syncPlayer(sp);
+        }
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        SacredArtsCommand.register(event.getDispatcher());
     }
 }
