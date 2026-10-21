@@ -151,6 +151,8 @@ MVP core systems implemented and committed (35 Java files, zero syntax errors):
 Next milestones: (1) cloud-build verification via GitHub Actions, (2) Remnant mob family +
 Remnant Tyrant boss, (3) iconic weapons batch 1 (scissors, Wintersteel blade, hunger arm, Eclipse).
 
+## Technical notes (Forge 1.20.1)
+
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).
 - Curios API optional integration for relic/belt trinket slots (Forge-only — one more
   reason Forge was the right loader pick).
