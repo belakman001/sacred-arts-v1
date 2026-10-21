@@ -20,6 +20,10 @@ public class SyncDataPacket {
     private final String ironBodyId;
     private final boolean goldsign;
     private final boolean cycling;
+    private final int level;
+    private final int levelXp;
+    private final int xpForNext;
+    private final int stageMaxLevel;
 
     public SyncDataPacket(ISacredArtist data) {
         this.enrolled = data.isEnrolled();
@@ -33,6 +37,10 @@ public class SyncDataPacket {
         this.ironBodyId = data.getIronBody().getId();
         this.goldsign = data.hasGoldsign();
         this.cycling = data.isCycling();
+        this.level = data.getLevel();
+        this.levelXp = data.getLevelXp();
+        this.xpForNext = com.sacredarts.config.SacredArtsConfig.LEVEL_XP_PER_LEVEL.get();
+        this.stageMaxLevel = data.getStage().getMaxLevel();
     }
 
     public SyncDataPacket(FriendlyByteBuf buf) {
@@ -47,6 +55,10 @@ public class SyncDataPacket {
         this.ironBodyId = buf.readUtf();
         this.goldsign = buf.readBoolean();
         this.cycling = buf.readBoolean();
+        this.level = buf.readInt();
+        this.levelXp = buf.readInt();
+        this.xpForNext = buf.readInt();
+        this.stageMaxLevel = buf.readInt();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -61,6 +73,10 @@ public class SyncDataPacket {
         buf.writeUtf(ironBodyId);
         buf.writeBoolean(goldsign);
         buf.writeBoolean(cycling);
+        buf.writeInt(level);
+        buf.writeInt(levelXp);
+        buf.writeInt(xpForNext);
+        buf.writeInt(stageMaxLevel);
     }
 
     public static void handle(SyncDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -79,4 +95,8 @@ public class SyncDataPacket {
     public String getIronBodyId() { return ironBodyId; }
     public boolean hasGoldsign() { return goldsign; }
     public boolean isCycling() { return cycling; }
+    public int getLevel() { return level; }
+    public int getLevelXp() { return levelXp; }
+    public int getXpForNext() { return xpForNext; }
+    public int getStageMaxLevel() { return stageMaxLevel; }
 }

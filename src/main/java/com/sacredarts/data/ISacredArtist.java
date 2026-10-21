@@ -23,6 +23,17 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     void addMastery(int amount);
     void setMastery(int mastery);
 
+    int getLevel();
+    void setLevel(int level);
+    int getLevelXp();
+    void addLevelXp(int amount);
+
+    /** Technique power multiplier from level: 1.0 at level 1, growing per level. */
+    default double getPowerMultiplier() {
+        return 1.0 + (getLevel() - 1)
+                * com.sacredarts.config.SacredArtsConfig.TECHNIQUE_POWER_PER_LEVEL.get();
+    }
+
     double getMadra();
     double getMaxMadra();
     void setMadra(double madra);

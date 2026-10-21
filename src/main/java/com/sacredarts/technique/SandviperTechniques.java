@@ -15,28 +15,34 @@ import static com.sacredarts.technique.TechniqueHelper.*;
 public class SandviperTechniques {
     public static List<Technique> create() {
         return List.of(
-                new Technique("venom_spit", Path.SANDVIPER, TechniqueType.STRIKER, 10, 0) {
+                new Technique("venom_spit", Path.SANDVIPER, TechniqueType.STRIKER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
                         for (int i = 0; i < 2; i++) {
-                            shootArrow(player, 4, new MobEffectInstance(MobEffects.POISON, 200, 0));
+                            shootArrow(player, (float) (4 * p),
+                                    new MobEffectInstance(MobEffects.POISON, (int) (200 * p), 0));
                         }
                     }
                 },
-                new Technique("serpents_swiftness", Path.SANDVIPER, TechniqueType.ENFORCER, 10, 10) {
+                new Technique("serpents_swiftness", Path.SANDVIPER, TechniqueType.ENFORCER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.MOVEMENT_SPEED, 20, 1);
-                        selfEffect(player, MobEffects.JUMP, 20, 0);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.MOVEMENT_SPEED, (int) (20 * p), 1);
+                        selfEffect(player, MobEffects.JUMP, (int) (20 * p), 0);
                     }
                 },
-                new Technique("miasma_cloud", Path.SANDVIPER, TechniqueType.RULER, 14, 25) {
+                new Technique("miasma_cloud", Path.SANDVIPER, TechniqueType.RULER, 14) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        poisonCloud(player, 12, 3.0f, 20, 1);
+                        double p = data.getPowerMultiplier();
+                        poisonCloud(player, 12, 3.0f, (int) (20 * p), 1);
                     }
                 },
-                new Technique("venom_needles", Path.SANDVIPER, TechniqueType.FORGER, 12, 40) {
+                new Technique("venom_needles", Path.SANDVIPER, TechniqueType.FORGER, 12) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
                         for (int i = 0; i < 5; i++) {
-                            shootArrow(player, 3, new MobEffectInstance(MobEffects.POISON, 160, 0));
+                            shootArrow(player, (float) (3 * p),
+                                    new MobEffectInstance(MobEffects.POISON, (int) (160 * p), 0));
                         }
                     }
                 }
@@ -44,13 +50,14 @@ public class SandviperTechniques {
     }
 
     public static Technique ultimate() {
-        return new Technique("venom_tide", Path.SANDVIPER, TechniqueType.RULER, 40, 120) {
+        return new Technique("venom_tide", Path.SANDVIPER, TechniqueType.RULER, 40) {
             @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                double p = data.getPowerMultiplier();
                 for (LivingEntity e : targetsAround(player, 8)) {
-                    hurt(e, player, 10);
-                    debuff(e, MobEffects.POISON, 15, 1);
+                    hurt(e, player, (float) (10 * p));
+                    debuff(e, MobEffects.POISON, (int) (15 * p), 1);
                 }
-                poisonCloud(player, 2, 5.0f, 15, 1);
+                poisonCloud(player, 2, 5.0f, (int) (15 * p), 1);
                 particles(player, net.minecraft.core.particles.ParticleTypes.ENTITY_EFFECT, 4, 40);
             }
         };

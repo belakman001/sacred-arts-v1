@@ -115,6 +115,25 @@ public final class TechniqueHelper {
         player.level().playSound(null, player.blockPosition(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1.0f, 1.2f);
     }
 
+    /** Cone of ender-dragon fire: dragon breath particles + damage along the look vector. */
+    public static void dragonSpray(ServerPlayer player, double range, float damage) {
+        ServerLevel level = player.serverLevel();
+        Vec3 eye = player.getEyePosition();
+        Vec3 dir = player.getLookAngle();
+        for (double d = 1.0; d <= range; d += 0.5) {
+            double spread = 0.15 + d * 0.12;
+            Vec3 p = eye.add(dir.scale(d));
+            level.sendParticles(ParticleTypes.DRAGON_BREATH, p.x, p.y, p.z, 4, spread, spread, spread, 0.02);
+            AABB box = new AABB(p.x - 0.8, p.y - 0.8, p.z - 0.8, p.x + 0.8, p.y + 0.8, p.z + 0.8);
+            for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
+                    e -> e != player && e.isAlive())) {
+                hurt(e, player, damage);
+            }
+        }
+        level.playSound(null, player.blockPosition(), SoundEvents.ENTITY_ENDER_DRAGON_SHOOT,
+                SoundSource.PLAYERS, 0.8f, 1.2f);
+    }
+
     /** Lingering poison cloud at the aimed point. */
     public static void poisonCloud(ServerPlayer player, double range, float radius, int seconds, int amplifier) {
         Vec3 eye = player.getEyePosition();

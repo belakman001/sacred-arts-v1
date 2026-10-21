@@ -155,6 +155,10 @@ Remnant Tyrant boss, (3) iconic weapons batch 1 (scissors, Wintersteel blade, hu
 
 v0.2 changes (2026-10-21): enrollment changed from random Path assignment to player choice via selection menu (playtest feedback); working jar v0.1.0 delivered to Kaleb and first cloud build compiled clean after 1.20.1 API fixes.
 
+v0.3 changes (2026-10-21): FIXED root cause of silent enrollment failure — capability attach listener used Player.class filter but Forge fires AttachCapabilitiesEvent with Entity's base class as generic type, so it never matched (verified against Forge source); now Entity.class + instanceof. HUD rewritten to read synced ClientData (client capability copy never enrolls). Manual gets enchantment glint. UI click sound on Path buttons.
+
+v0.4 changes (2026-10-21): level system — level 1-100, XP from cycling/kills/casts (config-tunable), stage caps (Foundation 5, Copper 10, Iron 20, Jade 25, Lowgold 35, Highgold 60, Truegold 100). All techniques unlocked from enrollment; power scales with level (1 + (level-1) * powerPerLevel). K toggles the stats menu. Stats menu redesigned with Stats/Techniques tabs, level XP bar, advancement progress, and per-technique descriptions. Fox Fire reworked: sprays ender-dragon fire (cone) instead of fireballs. New commands: /sacredarts setlevel, /sacredarts setstage.
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

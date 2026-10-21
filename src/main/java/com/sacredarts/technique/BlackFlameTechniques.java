@@ -14,43 +14,48 @@ import static com.sacredarts.technique.TechniqueHelper.*;
 public class BlackFlameTechniques {
     public static List<Technique> create() {
         return List.of(
-                new Technique("dragons_breath", Path.BLACK_FLAME, TechniqueType.STRIKER, 12, 0) {
+                new Technique("dragons_breath", Path.BLACK_FLAME, TechniqueType.STRIKER, 12) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        beam(player, 16, 8, true);
+                        double p = data.getPowerMultiplier();
+                        beam(player, 16, (float) (8 * p), true);
                     }
                 },
-                new Technique("burning_cloak", Path.BLACK_FLAME, TechniqueType.ENFORCER, 10, 10) {
+                new Technique("burning_cloak", Path.BLACK_FLAME, TechniqueType.ENFORCER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.MOVEMENT_SPEED, 20, 1);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.MOVEMENT_SPEED, (int) (20 * p), 1);
                         for (LivingEntity e : targetsAround(player, 4)) {
-                            e.setSecondsOnFire(4);
+                            e.setSecondsOnFire((int) (4 * p));
                         }
                         particles(player, net.minecraft.core.particles.ParticleTypes.FLAME, 1.5, 20);
                     }
                 },
-                new Technique("void_dragons_dance", Path.BLACK_FLAME, TechniqueType.RULER, 14, 25) {
+                new Technique("void_dragons_dance", Path.BLACK_FLAME, TechniqueType.RULER, 14) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
                         for (LivingEntity e : targetsAround(player, 6)) {
-                            hurt(e, player, 6);
-                            e.setSecondsOnFire(6);
+                            hurt(e, player, (float) (6 * p));
+                            e.setSecondsOnFire((int) (6 * p));
                         }
                         particles(player, net.minecraft.core.particles.ParticleTypes.FLAME, 3, 40);
                     }
                 },
-                new Technique("cinder_claws", Path.BLACK_FLAME, TechniqueType.FORGER, 10, 40) {
+                new Technique("cinder_claws", Path.BLACK_FLAME, TechniqueType.FORGER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.DAMAGE_BOOST, 30, 1);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.DAMAGE_BOOST, (int) (30 * p), 1);
                     }
                 }
         );
     }
 
     public static Technique ultimate() {
-        return new Technique("the_dragon_descends", Path.BLACK_FLAME, TechniqueType.FORGER, 40, 120) {
+        return new Technique("the_dragon_descends", Path.BLACK_FLAME, TechniqueType.FORGER, 40) {
             @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                burst(player, 8, 20);
+                double p = data.getPowerMultiplier();
+                burst(player, 8, (float) (20 * p));
                 for (LivingEntity e : targetsAround(player, 8)) {
-                    e.setSecondsOnFire(10);
+                    e.setSecondsOnFire((int) (10 * p));
                 }
             }
         };

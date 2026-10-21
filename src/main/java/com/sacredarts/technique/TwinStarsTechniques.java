@@ -15,44 +15,49 @@ import static com.sacredarts.technique.TechniqueHelper.*;
 public class TwinStarsTechniques {
     public static List<Technique> create() {
         return List.of(
-                new Technique("empty_palm", Path.TWIN_STARS, TechniqueType.STRIKER, 10, 0) {
+                new Technique("empty_palm", Path.TWIN_STARS, TechniqueType.STRIKER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
                         for (LivingEntity e : targetsInFront(player, 5, 1.5)) {
-                            hurt(e, player, 4);
-                            debuff(e, MobEffects.WEAKNESS, 10, 1);
-                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, 5, 0);
+                            hurt(e, player, (float) (4 * p));
+                            debuff(e, MobEffects.WEAKNESS, (int) (10 * p), 1);
+                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, (int) (5 * p), 0);
                         }
                         particles(player, net.minecraft.core.particles.ParticleTypes.END_ROD, 1.5, 15);
                     }
                 },
-                new Technique("soul_cloak", Path.TWIN_STARS, TechniqueType.ENFORCER, 10, 10) {
+                new Technique("soul_cloak", Path.TWIN_STARS, TechniqueType.ENFORCER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.NIGHT_VISION, 60, 0);
-                        selfEffect(player, MobEffects.MOVEMENT_SPEED, 20, 0);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.NIGHT_VISION, (int) (60 * p), 0);
+                        selfEffect(player, MobEffects.MOVEMENT_SPEED, (int) (20 * p), 0);
                     }
                 },
-                new Technique("hollow_domain", Path.TWIN_STARS, TechniqueType.RULER, 16, 25) {
+                new Technique("hollow_domain", Path.TWIN_STARS, TechniqueType.RULER, 16) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
                         for (LivingEntity e : targetsAround(player, 8)) {
-                            debuff(e, MobEffects.WEAKNESS, 15, 0);
-                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, 15, 0);
+                            debuff(e, MobEffects.WEAKNESS, (int) (15 * p), 0);
+                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, (int) (15 * p), 0);
                         }
                         particles(player, net.minecraft.core.particles.ParticleTypes.END_ROD, 4, 40);
                     }
                 },
-                new Technique("twin_barrier", Path.TWIN_STARS, TechniqueType.FORGER, 12, 40) {
+                new Technique("twin_barrier", Path.TWIN_STARS, TechniqueType.FORGER, 12) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.DAMAGE_RESISTANCE, 30, 1);
-                        selfEffect(player, MobEffects.ABSORPTION, 30, 1);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.DAMAGE_RESISTANCE, (int) (30 * p), 1);
+                        selfEffect(player, MobEffects.ABSORPTION, (int) (30 * p), 1);
                     }
                 }
         );
     }
 
     public static Technique ultimate() {
-        return new Technique("twin_stars_collision", Path.TWIN_STARS, TechniqueType.STRIKER, 40, 120) {
+        return new Technique("twin_stars_collision", Path.TWIN_STARS, TechniqueType.STRIKER, 40) {
             @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                burst(player, 8, 16);
+                double p = data.getPowerMultiplier();
+                burst(player, 8, (float) (16 * p));
                 for (LivingEntity e : targetsAround(player, 8)) {
                     Vec3 v = e.getDeltaMovement().add(0, 1.2, 0);
                     e.setDeltaMovement(v);

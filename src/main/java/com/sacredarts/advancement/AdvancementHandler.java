@@ -34,6 +34,7 @@ public class AdvancementHandler {
         if (data.isCycling()) {
             data.addCycled(max * SacredArtsConfig.CYCLING_REGEN_PCT.get() / 20.0);
             if (time % 10 == 0) {
+                data.addLevelXp(SacredArtsConfig.LEVEL_XP_CYCLING.get());
                 var p = player.position().add(0, 1, 0);
                 player.serverLevel().sendParticles(ParticleTypes.END_ROD,
                         p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.02);

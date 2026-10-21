@@ -114,6 +114,7 @@ public class SacredArts {
                 if (!data.isEnrolled()) return;
                 data.addKill();
                 data.addMastery(SacredArtsConfig.MASTERY_PER_KILL.get());
+                data.addLevelXp(SacredArtsConfig.LEVEL_XP_PER_KILL.get());
             });
         }
     }

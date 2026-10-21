@@ -1,7 +1,9 @@
 package com.sacredarts.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.sacredarts.advancement.Stage;
 import com.sacredarts.data.ModCapabilities;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.path.Path;
@@ -47,6 +49,39 @@ public class SacredArtsCommand {
                                         ModNetwork.syncPlayer(player);
                                         player.sendSystemMessage(Component.translatable(
                                                 "message.sacredarts.enrolled", data.getPath().getDisplayName()));
+                                    });
+                                    return 1;
+                                })))
+                .then(Commands.literal("setlevel")
+                        .then(Commands.argument("level", IntegerArgumentType.integer(1, 100))
+                                .executes(ctx -> {
+                                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                    int lvl = IntegerArgumentType.getInteger(ctx, "level");
+                                    player.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
+                                        data.setLevel(lvl);
+                                        ModNetwork.syncPlayer(player);
+                                        player.sendSystemMessage(Component.literal(
+                                                "[SacredArts] Level set to " + data.getLevel()));
+                                    });
+                                    return 1;
+                                })))
+                .then(Commands.literal("setstage")
+                        .then(Commands.argument("stage", StringArgumentType.word())
+                                .suggests((c, b) -> SharedSuggestionProvider.suggest(
+                                        Arrays.stream(Stage.values()).map(Stage::getId), b))
+                                .executes(ctx -> {
+                                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                    String id = StringArgumentType.getString(ctx, "stage");
+                                    player.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
+                                        Stage s = Stage.byId(id);
+                                        data.setStage(s);
+                                        if (data.getLevel() > s.getMaxLevel()) {
+                                            data.setLevel(s.getMaxLevel());
+                                        }
+                                        data.setMadra(data.getMaxMadra());
+                                        ModNetwork.syncPlayer(player);
+                                        player.sendSystemMessage(Component.translatable(
+                                                "message.sacredarts.stage_up", s.getDisplayName()));
                                     });
                                     return 1;
                                 }))));

@@ -9,6 +9,8 @@ public class SacredArtist implements ISacredArtist {
     private Stage stage = Stage.FOUNDATION;
     private Path path = Path.BLACK_FLAME;
     private int mastery = 0;
+    private int level = 1;
+    private int levelXp = 0;
     private double madra = 0;
     private double cycledTotal = 0;
     private int kills = 0;
@@ -31,6 +33,28 @@ public class SacredArtist implements ISacredArtist {
     @Override public int getMastery() { return mastery; }
     @Override public void addMastery(int amount) { this.mastery = Math.max(0, mastery + amount); }
     @Override public void setMastery(int mastery) { this.mastery = Math.max(0, mastery); }
+
+    @Override public int getLevel() { return level; }
+    @Override public void setLevel(int level) {
+        this.level = Math.max(1, Math.min(100, level));
+        this.levelXp = 0;
+    }
+    @Override public int getLevelXp() { return levelXp; }
+    @Override public void addLevelXp(int amount) {
+        if (amount <= 0 || !enrolled) return;
+        int max = stage.getMaxLevel();
+        if (level >= max) {
+            levelXp = 0;
+            return;
+        }
+        levelXp += amount;
+        int threshold = com.sacredarts.config.SacredArtsConfig.LEVEL_XP_PER_LEVEL.get();
+        while (levelXp >= threshold && level < max) {
+            levelXp -= threshold;
+            level++;
+        }
+        if (level >= max) levelXp = 0;
+    }
 
     @Override public double getMadra() { return madra; }
     @Override public double getMaxMadra() { return stage.getMaxMadra(); }
@@ -69,6 +93,8 @@ public class SacredArtist implements ISacredArtist {
         tag.putString("stage", stage.getId());
         tag.putString("path", path.getId());
         tag.putInt("mastery", mastery);
+        tag.putInt("level", level);
+        tag.putInt("levelXp", levelXp);
         tag.putDouble("madra", madra);
         tag.putDouble("cycledTotal", cycledTotal);
         tag.putInt("kills", kills);
@@ -83,6 +109,8 @@ public class SacredArtist implements ISacredArtist {
         stage = Stage.byId(tag.getString("stage"));
         path = Path.byId(tag.getString("path"));
         mastery = tag.getInt("mastery");
+        level = Math.max(1, tag.getInt("level"));
+        levelXp = tag.getInt("levelXp");
         madra = tag.getDouble("madra");
         cycledTotal = tag.getDouble("cycledTotal");
         kills = tag.getInt("kills");
@@ -96,6 +124,8 @@ public class SacredArtist implements ISacredArtist {
         this.path = path;
         this.stage = Stage.FOUNDATION;
         this.mastery = 0;
+        this.level = 1;
+        this.levelXp = 0;
         this.madra = getMaxMadra();
         this.cycledTotal = 0;
         this.kills = 0;

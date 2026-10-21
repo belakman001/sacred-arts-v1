@@ -16,13 +16,17 @@ public class ClientData {
     public static double cycledTotal = 0;
     public static String ironBodyId = "none";
     public static boolean goldsign = false;
-
     public static boolean cycling = false;
+    public static int level = 1;
+    public static int levelXp = 0;
+    public static int xpForNext = 100;
+    public static int stageMaxLevel = 5;
 
     public static void update(boolean enrolled, String pathId, String stageId,
                               double madra, double maxMadra, int mastery, int kills,
                               double cycledTotal, String ironBodyId, boolean goldsign,
-                              boolean cycling) {
+                              boolean cycling, int level, int levelXp, int xpForNext,
+                              int stageMaxLevel) {
         ClientData.enrolled = enrolled;
         ClientData.pathId = pathId;
         ClientData.stageId = stageId;
@@ -34,5 +38,9 @@ public class ClientData {
         ClientData.ironBodyId = ironBodyId;
         ClientData.goldsign = goldsign;
         ClientData.cycling = cycling;
+        ClientData.level = level;
+        ClientData.levelXp = levelXp;
+        ClientData.xpForNext = xpForNext;
+        ClientData.stageMaxLevel = stageMaxLevel;
     }
 }

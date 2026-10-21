@@ -30,11 +30,7 @@ public class TechniqueHandler {
                 if (slot < 0 || slot >= list.size()) return;
                 tech = list.get(slot);
             }
-            if (data.getMastery() < tech.getMasteryRequired()) {
-                player.displayClientMessage(Component.translatable("message.sacredarts.mastery_locked",
-                        tech.getDisplayName(), tech.getMasteryRequired()), true);
-                return;
-            }
+            // All techniques are unlocked from enrollment; they grow stronger with level.
             if (!data.spendMadra(tech.getMadraCost())) {
                 player.displayClientMessage(Component.translatable("message.sacredarts.no_madra"), true);
                 player.serverLevel().playSound(null, player.blockPosition(),
@@ -43,6 +39,7 @@ public class TechniqueHandler {
             }
             tech.cast(player, data);
             data.addMastery(SacredArtsConfig.MASTERY_PER_CAST.get());
+            data.addLevelXp(SacredArtsConfig.LEVEL_XP_PER_CAST.get());
         });
     }
 }

@@ -15,21 +15,23 @@ import static com.sacredarts.technique.TechniqueHelper.*;
 public class WhiteFoxTechniques {
     public static List<Technique> create() {
         return List.of(
-                new Technique("fox_fire", Path.WHITE_FOX, TechniqueType.STRIKER, 8, 0) {
+                new Technique("fox_fire", Path.WHITE_FOX, TechniqueType.STRIKER, 8) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        for (int i = 0; i < 3; i++) shootFireball(player);
-                        for (LivingEntity e : targetsInFront(player, 12, 2)) {
-                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, 5, 0); // illusory terror
+                        double p = data.getPowerMultiplier();
+                        dragonSpray(player, 7, (float) (6 * p));
+                        for (LivingEntity e : targetsInFront(player, 8, 2.5)) {
+                            debuff(e, MobEffects.MOVEMENT_SLOWDOWN, (int) (4 * p), 0); // illusory terror
                         }
                     }
                 },
-                new Technique("fox_tail", Path.WHITE_FOX, TechniqueType.ENFORCER, 10, 10) {
+                new Technique("fox_tail", Path.WHITE_FOX, TechniqueType.ENFORCER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.INVISIBILITY, 8, 0);
-                        selfEffect(player, MobEffects.MOVEMENT_SPEED, 10, 1);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.INVISIBILITY, (int) (8 * p), 0);
+                        selfEffect(player, MobEffects.MOVEMENT_SPEED, (int) (10 * p), 1);
                     }
                 },
-                new Technique("fox_dream", Path.WHITE_FOX, TechniqueType.RULER, 14, 25) {
+                new Technique("fox_dream", Path.WHITE_FOX, TechniqueType.RULER, 14) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
                         List<LivingEntity> mobs = targetsAround(player, 8).stream()
                                 .filter(e -> e instanceof Mob).toList();
@@ -43,12 +45,13 @@ public class WhiteFoxTechniques {
                         particles(player, net.minecraft.core.particles.ParticleTypes.WITCH, 4, 30);
                     }
                 },
-                new Technique("fox_mirror", Path.WHITE_FOX, TechniqueType.FORGER, 12, 40) {
+                new Technique("fox_mirror", Path.WHITE_FOX, TechniqueType.FORGER, 12) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        selfEffect(player, MobEffects.INVISIBILITY, 6, 0);
-                        selfEffect(player, MobEffects.MOVEMENT_SPEED, 10, 0);
+                        double p = data.getPowerMultiplier();
+                        selfEffect(player, MobEffects.INVISIBILITY, (int) (6 * p), 0);
+                        selfEffect(player, MobEffects.MOVEMENT_SPEED, (int) (10 * p), 0);
                         for (LivingEntity e : targetsAround(player, 8)) {
-                            debuff(e, MobEffects.BLINDNESS, 5, 0);
+                            debuff(e, MobEffects.BLINDNESS, (int) (5 * p), 0);
                         }
                     }
                 }
@@ -56,12 +59,13 @@ public class WhiteFoxTechniques {
     }
 
     public static Technique ultimate() {
-        return new Technique("grand_illusion", Path.WHITE_FOX, TechniqueType.RULER, 40, 120) {
+        return new Technique("grand_illusion", Path.WHITE_FOX, TechniqueType.RULER, 40) {
             @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                double p = data.getPowerMultiplier();
                 for (LivingEntity e : targetsAround(player, 16)) {
-                    debuff(e, MobEffects.DARKNESS, 10, 0);
-                    debuff(e, MobEffects.BLINDNESS, 10, 0);
-                    debuff(e, MobEffects.MOVEMENT_SLOWDOWN, 20, 1);
+                    debuff(e, MobEffects.DARKNESS, (int) (10 * p), 0);
+                    debuff(e, MobEffects.BLINDNESS, (int) (10 * p), 0);
+                    debuff(e, MobEffects.MOVEMENT_SLOWDOWN, (int) (20 * p), 1);
                 }
                 particles(player, net.minecraft.core.particles.ParticleTypes.WITCH, 8, 60);
             }
