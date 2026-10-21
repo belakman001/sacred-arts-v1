@@ -13,7 +13,8 @@ public class ClientPacketHandler {
     public static void syncData(SyncDataPacket msg) {
         ClientData.update(msg.isEnrolled(), msg.getPathId(), msg.getStageId(),
                 msg.getMadra(), msg.getMaxMadra(), msg.getMastery(), msg.getKills(),
-                msg.getCycledTotal(), msg.getIronBodyId(), msg.hasGoldsign());
+                msg.getCycledTotal(), msg.getIronBodyId(), msg.hasGoldsign(),
+                msg.isCycling());
     }
 
     /** Right-click with the Foundation Manual: choose a Path, or review stats if enrolled. */

@@ -17,6 +17,12 @@ public class FoundationManualItem extends Item {
         super(new Item.Properties().stacksTo(1));
     }
 
+    /** Enchantment glint so it reads as special, not a plain book. */
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);

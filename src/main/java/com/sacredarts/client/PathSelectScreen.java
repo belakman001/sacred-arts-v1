@@ -3,11 +3,14 @@ package com.sacredarts.client;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.network.SelectPathPacket;
 import com.sacredarts.path.Path;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 
 /** Choose your Path. The manual is consumed once a Path is chosen. */
@@ -32,6 +35,8 @@ public class PathSelectScreen extends Screen {
             int by = y + row * 32;
             this.addRenderableWidget(Button.builder(path.getDisplayName(), btn -> {
                                 ModNetwork.CHANNEL.sendToServer(new SelectPathPacket(path.getId(), hand));
+                                Minecraft.getInstance().getSoundManager().play(
+                                        SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                                 this.minecraft.setScreen(null);
                             })
                             .bounds(x, by, 160, 24)

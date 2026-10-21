@@ -17,9 +17,12 @@ public class ClientData {
     public static String ironBodyId = "none";
     public static boolean goldsign = false;
 
+    public static boolean cycling = false;
+
     public static void update(boolean enrolled, String pathId, String stageId,
                               double madra, double maxMadra, int mastery, int kills,
-                              double cycledTotal, String ironBodyId, boolean goldsign) {
+                              double cycledTotal, String ironBodyId, boolean goldsign,
+                              boolean cycling) {
         ClientData.enrolled = enrolled;
         ClientData.pathId = pathId;
         ClientData.stageId = stageId;
@@ -30,5 +33,6 @@ public class ClientData {
         ClientData.cycledTotal = cycledTotal;
         ClientData.ironBodyId = ironBodyId;
         ClientData.goldsign = goldsign;
+        ClientData.cycling = cycling;
     }
 }

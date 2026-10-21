@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -79,12 +80,16 @@ public class SacredArts {
         context.registerConfig(ModConfig.Type.COMMON, SacredArtsConfig.SPEC);
 
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.addGenericListener(Player.class, this::onAttachCapabilities);
+        // NOTE: the filter must be Entity.class, not Player.class — Forge fires
+        // AttachCapabilitiesEvent with Entity's base class as the generic type,
+        // so a Player.class filter never matches and the capability never attaches.
+        MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, this::onAttachCapabilities);
 
         LOGGER.info("Sacred Arts stirs. The Way opens.");
     }
 
-    private void onAttachCapabilities(AttachCapabilitiesEvent<Player> event) {
+    private void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+        if (!(event.getObject() instanceof Player)) return;
         SacredArtistProvider provider = new SacredArtistProvider();
         event.addCapability(new ResourceLocation(MODID, "sacred_artist"), provider);
         event.addListener(provider::invalidate);

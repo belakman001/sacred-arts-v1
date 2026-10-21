@@ -19,6 +19,7 @@ public class SyncDataPacket {
     private final double cycledTotal;
     private final String ironBodyId;
     private final boolean goldsign;
+    private final boolean cycling;
 
     public SyncDataPacket(ISacredArtist data) {
         this.enrolled = data.isEnrolled();
@@ -31,6 +32,7 @@ public class SyncDataPacket {
         this.cycledTotal = data.getCycledTotal();
         this.ironBodyId = data.getIronBody().getId();
         this.goldsign = data.hasGoldsign();
+        this.cycling = data.isCycling();
     }
 
     public SyncDataPacket(FriendlyByteBuf buf) {
@@ -44,6 +46,7 @@ public class SyncDataPacket {
         this.cycledTotal = buf.readDouble();
         this.ironBodyId = buf.readUtf();
         this.goldsign = buf.readBoolean();
+        this.cycling = buf.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -57,6 +60,7 @@ public class SyncDataPacket {
         buf.writeDouble(cycledTotal);
         buf.writeUtf(ironBodyId);
         buf.writeBoolean(goldsign);
+        buf.writeBoolean(cycling);
     }
 
     public static void handle(SyncDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -74,4 +78,5 @@ public class SyncDataPacket {
     public double getCycledTotal() { return cycledTotal; }
     public String getIronBodyId() { return ironBodyId; }
     public boolean hasGoldsign() { return goldsign; }
+    public boolean isCycling() { return cycling; }
 }
