@@ -1,8 +1,7 @@
 package com.sacredarts.entity;
 
 import com.sacredarts.technique.TechniqueHelper;
-import net.minecraft.core.particles.ColorParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,8 +18,9 @@ import net.minecraft.world.phys.EntityHitResult;
 
 /** Sandviper striker/forger: a bright lime-green toxic needle. */
 public class NeedleProjectileEntity extends ThrowableItemProjectile {
-    /** Lime green. */
-    private static final int LIME = 0x39FF14;
+    /** Lime green dust. */
+    private static final DustParticleOptions LIME =
+            new DustParticleOptions(new org.joml.Vector3f(0.2f, 1.0f, 0.1f), 1.0f);
 
     private float damage = 4;
     private int poisonDuration = 200;
@@ -55,7 +55,7 @@ public class NeedleProjectileEntity extends ThrowableItemProjectile {
         super.tick();
         // Bright lime-green trail.
         if (level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(new ColorParticleOption(ParticleTypes.ENTITY_EFFECT, LIME),
+            serverLevel.sendParticles(LIME,
                     getX(), getY(), getZ(), 3, 0.15, 0.15, 0.15, 0.1);
         }
     }
@@ -73,7 +73,7 @@ public class NeedleProjectileEntity extends ThrowableItemProjectile {
                 living.hurt(living.damageSources().indirectMagic(this, this), damage);
             }
             if (level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(new ColorParticleOption(ParticleTypes.ENTITY_EFFECT, LIME),
+                serverLevel.sendParticles(LIME,
                         living.getX(), living.getY() + 1, living.getZ(), 10, 0.5, 0.5, 0.5, 0.5);
             }
         }
