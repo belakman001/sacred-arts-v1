@@ -109,20 +109,6 @@ public class SacredArts {
         }
     }
 
-    /** Sandviper path: true poison immunity — the effect can never be applied. */
-    @SubscribeEvent
-    public void onEffectAdded(net.minecraftforge.event.entity.living.MobEffectEvent.Added event) {
-        if (event.getEffectInstance().getEffect() != net.minecraft.world.effect.MobEffects.POISON) return;
-        if (event.getEntity() instanceof ServerPlayer sp) {
-            sp.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
-                if (data.isEnrolled()
-                        && data.getPath() == com.sacredarts.path.Path.SANDVIPER) {
-                    event.setCanceled(true);
-                }
-            });
-        }
-    }
-
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         if (event.getSource().getEntity() instanceof ServerPlayer sp && event.getEntity() instanceof Enemy) {
