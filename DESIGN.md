@@ -161,6 +161,8 @@ v0.4 changes (2026-10-21): level system — level 1-100, XP from cycling/kills/c
 
 v0.5 changes (2026-10-21): Copper Sight toggle (G keybind + server packet, persisted in NBT, shown in stats menu). Fixed K not closing the menu: IN_GAME keybinds don't fire while a screen is open, so StatsScreen now handles its own close key via keyPressed.
 
+v0.6 changes (2026-10-21): Black Flame flavor rework — Striker (Dragon's Breath) now charges a growing black ball in the hand (~1.25s) then fires a black beam (aim at fire time); Enforcer (Burning Cloak) wreathed in black/orange flames for the full speed-boost duration; Forger (Cinder Claws) reworked into a Forged Wisp entity that builds overhead for 2s (black/orange particles, hand flames on caster) then hunts the caster's look target and detonates; Ultimate (The Dragon Descends) erupts in black/orange flame. Done button removed from stats menu (K/ESC close it).
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

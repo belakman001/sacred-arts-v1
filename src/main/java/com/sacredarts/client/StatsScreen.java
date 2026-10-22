@@ -36,10 +36,6 @@ public class StatsScreen extends Screen {
                         b -> tab = 1)
                 .bounds(cx + 5, 44, 100, 20)
                 .build());
-        this.addRenderableWidget(Button.builder(Component.translatable("screen.sacredarts.done"),
-                        b -> this.minecraft.setScreen(null))
-                .bounds(cx - 50, this.height - 32, 100, 20)
-                .build());
     }
 
     @Override

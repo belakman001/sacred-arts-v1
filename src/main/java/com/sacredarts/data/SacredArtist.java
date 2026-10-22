@@ -18,6 +18,9 @@ public class SacredArtist implements ISacredArtist {
     private boolean goldsign = false;
     private boolean cycling = false;
     private boolean copperSightEnabled = true;
+    private int strikerChargeTicks = 0;
+    private float strikerChargeDamage = 0;
+    private int cloakTicks = 0;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -90,6 +93,13 @@ public class SacredArtist implements ISacredArtist {
     @Override public boolean isCopperSightEnabled() { return copperSightEnabled; }
     @Override public void setCopperSightEnabled(boolean enabled) { this.copperSightEnabled = enabled; }
 
+    @Override public int getStrikerChargeTicks() { return strikerChargeTicks; }
+    @Override public void setStrikerChargeTicks(int ticks) { this.strikerChargeTicks = Math.max(0, ticks); }
+    @Override public float getStrikerChargeDamage() { return strikerChargeDamage; }
+    @Override public void setStrikerChargeDamage(float damage) { this.strikerChargeDamage = damage; }
+    @Override public int getCloakTicks() { return cloakTicks; }
+    @Override public void setCloakTicks(int ticks) { this.cloakTicks = Math.max(0, ticks); }
+
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
@@ -105,6 +115,9 @@ public class SacredArtist implements ISacredArtist {
         tag.putString("ironBody", ironBody.getId());
         tag.putBoolean("goldsign", goldsign);
         tag.putBoolean("copperSightEnabled", copperSightEnabled);
+        tag.putInt("strikerChargeTicks", strikerChargeTicks);
+        tag.putFloat("strikerChargeDamage", strikerChargeDamage);
+        tag.putInt("cloakTicks", cloakTicks);
         return tag;
     }
 
@@ -122,6 +135,9 @@ public class SacredArtist implements ISacredArtist {
         ironBody = IronBody.byId(tag.getString("ironBody"));
         goldsign = tag.getBoolean("goldsign");
         copperSightEnabled = !tag.contains("copperSightEnabled") || tag.getBoolean("copperSightEnabled");
+        strikerChargeTicks = tag.getInt("strikerChargeTicks");
+        strikerChargeDamage = tag.getFloat("strikerChargeDamage");
+        cloakTicks = tag.getInt("cloakTicks");
         cycling = false;
     }
 

@@ -57,4 +57,14 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
 
     boolean isCopperSightEnabled();
     void setCopperSightEnabled(boolean enabled);
+
+    /** Black Flame striker charge-up: ticks remaining, 0 = not charging. */
+    int getStrikerChargeTicks();
+    void setStrikerChargeTicks(int ticks);
+    float getStrikerChargeDamage();
+    void setStrikerChargeDamage(float damage);
+
+    /** Black Flame enforcer: ticks of flame particles remaining. */
+    int getCloakTicks();
+    void setCloakTicks(int ticks);
 }

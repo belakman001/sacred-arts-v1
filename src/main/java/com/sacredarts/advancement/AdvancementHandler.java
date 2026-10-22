@@ -66,10 +66,66 @@ public class AdvancementHandler {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 220, 0, false, false, true));
         }
 
+        // Black Flame striker charge-up: a black ball grows in the hand, then the beam fires.
+        if (data.getStrikerChargeTicks() > 0) {
+            int left = data.getStrikerChargeTicks() - 1;
+            data.setStrikerChargeTicks(left);
+            spawnChargeBall(player,
+                    BlackFlameTechniques.STRIKER_CHARGE_TICKS - left,
+                    BlackFlameTechniques.STRIKER_CHARGE_TICKS);
+            if (left <= 0) {
+                com.sacredarts.technique.TechniqueHelper.blackBeam(
+                        player, 16, data.getStrikerChargeDamage(), true);
+            }
+        }
+
+        // Black Flame enforcer: black + orange flames for the whole boost.
+        if (data.getCloakTicks() > 0) {
+            data.setCloakTicks(data.getCloakTicks() - 1);
+            if (time % 2 == 0) {
+                spawnCloakFlames(player);
+            }
+        }
+
         // Keep the client's HUD and menus fresh.
         if (time % 40 == 0) {
             ModNetwork.syncPlayer(player);
         }
+    }
+
+    /** Growing black ball in the hand: dark smoke core + orange flame wisps. */
+    private static void spawnChargeBall(ServerPlayer player, int elapsed, int total) {
+        float progress = Math.min(1f, (float) elapsed / total);
+        net.minecraft.world.phys.Vec3 eye = player.getEyePosition();
+        net.minecraft.world.phys.Vec3 look = player.getLookAngle();
+        net.minecraft.world.phys.Vec3 hand = eye.add(look.scale(0.6)).add(0, -0.35, 0);
+        double radius = 0.2 + progress * 0.55;
+        int count = 6 + (int) (progress * 14);
+        for (int i = 0; i < count; i++) {
+            double a = player.getRandom().nextDouble() * Math.PI * 2;
+            double b = player.getRandom().nextDouble() * Math.PI - Math.PI / 2;
+            double x = hand.x + Math.cos(a) * Math.cos(b) * radius;
+            double y = hand.y + Math.sin(b) * radius;
+            double z = hand.z + Math.sin(a) * Math.cos(b) * radius;
+            player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE,
+                    x, y, z, 1, 0.03, 0.03, 0.03, 0.01);
+            player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,
+                    x, y, z, 1, 0.03, 0.03, 0.03, 0.01);
+        }
+    }
+
+    /** Ring of black + orange flame around the player. */
+    private static void spawnCloakFlames(ServerPlayer player) {
+        net.minecraft.world.phys.Vec3 pos = player.position();
+        double angle = player.getRandom().nextDouble() * Math.PI * 2;
+        double r = 0.7;
+        double x = pos.x + Math.cos(angle) * r;
+        double z = pos.z + Math.sin(angle) * r;
+        double y = pos.y + player.getRandom().nextDouble() * 1.8;
+        player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE,
+                x, y, z, 1, 0.08, 0.08, 0.08, 0.01);
+        player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,
+                x, y, z, 1, 0.08, 0.08, 0.08, 0.01);
     }
 
     private static void checkAdvancement(ServerPlayer player, ISacredArtist data) {

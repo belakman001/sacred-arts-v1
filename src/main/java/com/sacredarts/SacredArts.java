@@ -6,6 +6,7 @@ import com.sacredarts.command.SacredArtsCommand;
 import com.sacredarts.config.SacredArtsConfig;
 import com.sacredarts.data.ModCapabilities;
 import com.sacredarts.data.SacredArtistProvider;
+import com.sacredarts.entity.ModEntities;
 import com.sacredarts.item.ModItems;
 import com.sacredarts.network.ModNetwork;
 import net.minecraft.core.registries.Registries;
@@ -74,6 +75,7 @@ public class SacredArts {
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        ModEntities.TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         ModNetwork.register();

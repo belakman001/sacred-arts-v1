@@ -64,6 +64,45 @@ public final class TechniqueHelper {
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0f, 0.8f);
     }
 
+    /** Damages everything along the look vector, with black + orange flame particles. */
+    public static void blackBeam(ServerPlayer player, double range, float damage, boolean ignite) {
+        ServerLevel level = player.serverLevel();
+        Vec3 eye = player.getEyePosition();
+        Vec3 dir = player.getLookAngle();
+        for (double d = 1.0; d <= range; d += 0.75) {
+            Vec3 p = eye.add(dir.scale(d));
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 3, 0.2, 0.2, 0.2, 0.02);
+            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 2, 0.15, 0.15, 0.15, 0.02);
+            AABB box = new AABB(p.x - 1, p.y - 1, p.z - 1, p.x + 1, p.y + 1, p.z + 1);
+            for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
+                    e -> e != player && e.isAlive())) {
+                hurt(e, player, damage);
+                if (ignite) e.setSecondsOnFire(5);
+            }
+        }
+        level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0f, 0.6f);
+    }
+
+    /** Radial burst of black + orange flame (no block damage). */
+    public static void blackBurst(ServerPlayer player, double radius, float damage) {
+        blackBurstAt(player.serverLevel(), player.position().add(0, 1, 0), radius, damage, player);
+    }
+
+    public static void blackBurstAt(ServerLevel level, Vec3 pos, double radius, float damage,
+                                    ServerPlayer src) {
+        level.sendParticles(ParticleTypes.LARGE_SMOKE, pos.x, pos.y, pos.z, 16, 1.5, 1.0, 1.5, 0.05);
+        level.sendParticles(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 16, 1.5, 1.0, 1.5, 0.05);
+        level.sendParticles(ParticleTypes.LAVA, pos.x, pos.y, pos.z, 8, 1.0, 1.0, 1.0, 0.1);
+        AABB box = new AABB(pos.x - radius, pos.y - radius, pos.z - radius,
+                pos.x + radius, pos.y + radius, pos.z + radius);
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
+                e -> e != src && e.isAlive() && e.distanceToSqr(pos) <= radius * radius)) {
+            hurt(e, src, damage);
+        }
+        level.playSound(null, new net.minecraft.core.BlockPos((int) pos.x, (int) pos.y, (int) pos.z),
+                SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 0.8f, 0.8f);
+    }
+
     /** Radial burst with explosion particles (no block damage). */
     public static void burst(ServerPlayer player, double radius, float damage) {
         ServerLevel level = player.serverLevel();

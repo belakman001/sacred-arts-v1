@@ -1,12 +1,15 @@
 package com.sacredarts.client;
 
 import com.sacredarts.SacredArts;
+import com.sacredarts.client.ForgedWispRenderer;
+import com.sacredarts.entity.ModEntities;
 import com.sacredarts.network.CastTechniquePacket;
 import com.sacredarts.network.CyclePacket;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.network.ToggleCopperSightPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -27,6 +30,11 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onRegisterOverlays(RegisterGuiOverlaysEvent event) {
             event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "madra_bar", MadraOverlay.HUD);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ForgedWispRenderer::new);
         }
     }
 
