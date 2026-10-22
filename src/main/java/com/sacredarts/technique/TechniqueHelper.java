@@ -64,6 +64,25 @@ public final class TechniqueHelper {
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0f, 0.8f);
     }
 
+    /** Damages everything along the look vector. A thick, glowing WHITE beacon-beam. */
+    public static void whiteBeam(ServerPlayer player, double range, float damage) {
+        ServerLevel level = player.serverLevel();
+        Vec3 eye = player.getEyePosition();
+        Vec3 dir = player.getLookAngle();
+        for (double d = 1.0; d <= range; d += 0.4) {
+            Vec3 p = eye.add(dir.scale(d));
+            // Dense white core.
+            level.sendParticles(ParticleTypes.END_ROD, p.x, p.y, p.z, 10, 0.4, 0.4, 0.4, 0.02);
+            level.sendParticles(ParticleTypes.FIREWORK, p.x, p.y, p.z, 4, 0.25, 0.25, 0.25, 0.02);
+            AABB box = new AABB(p.x - 1, p.y - 1, p.z - 1, p.x + 1, p.y + 1, p.z + 1);
+            for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
+                    e -> e != player && e.isAlive())) {
+                hurt(e, player, damage);
+            }
+        }
+        level.playSound(null, player.blockPosition(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0f, 1.4f);
+    }
+
     /** Damages everything along the look vector. A thick, dense BLACK beam with only a hint of orange. */
     public static void blackBeam(ServerPlayer player, double range, float damage, boolean ignite) {
         ServerLevel level = player.serverLevel();
@@ -181,14 +200,32 @@ public final class TechniqueHelper {
     /** Lingering poison cloud at the aimed point. */
     public static void poisonCloud(ServerPlayer player, double range, float radius, int seconds, int amplifier) {
         Vec3 eye = player.getEyePosition();
-        Vec3 end = eye.add(player.getLookAngle().scale(range));
-        BlockHitResult hit = player.level().clip(
+        Vec3 look = player.getLookAngle();
+        Vec3 end = eye.add(look.scale(range));
+        // Block hit.
+        BlockHitResult blockHit = player.level().clip(
                 new ClipContext(eye, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
-        Vec3 at = hit.getLocation();
+        Vec3 at = blockHit.getLocation();
+        double bestDist = eye.distanceTo(at);
+        // Prefer the nearest living entity in the look direction (so close mobs are hit).
+        AABB scan = new AABB(eye, end).inflate(1.5);
+        for (LivingEntity e : player.level().getEntitiesOfClass(LivingEntity.class, scan,
+                e -> e != player && e.isAlive())) {
+            Vec3 toE = e.position().add(0, e.getBbHeight() * 0.5, 0).subtract(eye);
+            double along = toE.dot(look);
+            if (along > 1.0 && along < bestDist) {
+                Vec3 closest = eye.add(look.scale(along));
+                double lateral = closest.distanceTo(e.position().add(0, e.getBbHeight() * 0.5, 0));
+                if (lateral < 2.5) {
+                    at = e.position();
+                    bestDist = along;
+                }
+            }
+        }
         AreaEffectCloud cloud = new AreaEffectCloud(player.level(), at.x, at.y + 0.5, at.z);
         cloud.setRadius(radius);
         cloud.setDuration(seconds * 20);
-        cloud.setWaitTime(20);
+        cloud.setWaitTime(10);
         cloud.addEffect(new MobEffectInstance(MobEffects.POISON, seconds * 20, amplifier));
         player.level().addFreshEntity(cloud);
         player.level().playSound(null, player.blockPosition(), SoundEvents.BREWING_STAND_BREW,

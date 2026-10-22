@@ -35,14 +35,6 @@ public class ModEntities {
                     .updateInterval(1)
                     .build("blade"));
 
-    public static final RegistryObject<EntityType<SpearProjectileEntity>> SPEAR =
-            TYPES.register("spear", () -> EntityType.Builder
-                    .<SpearProjectileEntity>of(SpearProjectileEntity::new, MobCategory.MISC)
-                    .sized(0.5F, 0.5F)
-                    .clientTrackingRange(10)
-                    .updateInterval(1)
-                    .build("spear"));
-
     public static final RegistryObject<EntityType<NeedleProjectileEntity>> NEEDLE =
             TYPES.register("needle", () -> EntityType.Builder
                     .<NeedleProjectileEntity>of(NeedleProjectileEntity::new, MobCategory.MISC)

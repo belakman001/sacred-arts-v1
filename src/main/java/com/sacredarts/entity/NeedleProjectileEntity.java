@@ -1,10 +1,12 @@
 package com.sacredarts.entity;
 
 import com.sacredarts.technique.TechniqueHelper;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,10 +17,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-/** Sandviper striker/forger: a bright toxic-green needle. */
+/** Sandviper striker/forger: a bright lime-green toxic needle. */
 public class NeedleProjectileEntity extends ThrowableItemProjectile {
+    /** Lime green. */
+    private static final int LIME = 0x39FF14;
+
     private float damage = 4;
-    private MobEffectInstance poison;
+    private int poisonDuration = 200;
+    private int poisonAmplifier = 0;
 
     public NeedleProjectileEntity(EntityType<? extends ThrowableItemProjectile> type, Level level) {
         super(type, level);
@@ -34,7 +40,9 @@ public class NeedleProjectileEntity extends ThrowableItemProjectile {
     }
 
     public void setPoison(MobEffectInstance poison) {
-        this.poison = poison;
+        // Store as primitives — robust across hit handling.
+        this.poisonDuration = poison.getDuration();
+        this.poisonAmplifier = poison.getAmplifier();
     }
 
     @Override
@@ -45,26 +53,28 @@ public class NeedleProjectileEntity extends ThrowableItemProjectile {
     @Override
     public void tick() {
         super.tick();
-        // Bright toxic-green trail.
+        // Bright lime-green trail.
         if (level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.ENTITY_EFFECT,
-                    getX(), getY(), getZ(), 4, 0.1, 1.0, 0.1, 0.5);
+            serverLevel.sendParticles(new ColorParticleOption(ParticleTypes.ENTITY_EFFECT, LIME),
+                    getX(), getY(), getZ(), 3, 0.15, 0.15, 0.15, 0.1);
         }
     }
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
-        Entity target = result.getEntity();
-        Entity owner = getOwner();
-        if (target instanceof LivingEntity living && owner instanceof ServerPlayer sp) {
-            TechniqueHelper.hurt(living, sp, damage);
-            if (poison != null) {
-                living.addEffect(new MobEffectInstance(poison));
+        if (result.getEntity() instanceof LivingEntity living) {
+            // Poison FIRST so it lands even if damage has issues.
+            living.addEffect(new MobEffectInstance(MobEffects.POISON, poisonDuration, poisonAmplifier));
+            Entity owner = getOwner();
+            if (owner instanceof ServerPlayer sp) {
+                TechniqueHelper.hurt(living, sp, damage);
+            } else {
+                living.hurt(living.damageSources().indirectMagic(this, this), damage);
             }
             if (level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.ENTITY_EFFECT,
-                        target.getX(), target.getY() + 1, target.getZ(), 12, 0.1, 1.0, 0.1, 1.0);
+                serverLevel.sendParticles(new ColorParticleOption(ParticleTypes.ENTITY_EFFECT, LIME),
+                        living.getX(), living.getY() + 1, living.getZ(), 10, 0.5, 0.5, 0.5, 0.5);
             }
         }
         discard();

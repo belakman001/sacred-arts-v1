@@ -167,6 +167,8 @@ v0.7 changes (2026-10-21): Wisp moved to Void Dragon's Dance (Ruler) with a long
 
 v0.8 changes (2026-10-21): Black Flame striker beam made MUCH denser black (was mostly flame); Cinder Claw particles reduced. Sword Aura Field renamed to The Endless Sword (aura ring made louder). Rippling Sword now requires a held sword and fires crescent slash waves (invisible, sweep-trail) matching The Endless Sword's style. Hollow Bolt renamed to The Hollow Spear — glowing white trident projectiles. Hollow King's Armor now shows spectral white armor (particle shell) for its duration. Still Air renamed to The Hollow Domain (20 blocks): slows+weakens, clears active techniques/entities, silences casting for 5s. Sandviper grants poison immunity. Venom Spit/Needles now fire bright toxic-green needle projectiles.
 
+v0.9 changes (2026-10-21): The Endless Sword ring is now a true bell (BELL_RESONATE). Twin Stars Hollow Domain now matches the Hollow King's (20-block clear + 5s silence) with white area particles (ground ring + drifting motes). The Hollow Spear is now a white beacon-beam (no more trident items). Hollow King's Armor uses faint WHITE_ASH for a translucent spectral look. Sandviper poison immunity is now event-based (bulletproof — poison can never be applied); poison clouds now target the nearest mob in the look direction instead of always landing at max range.
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

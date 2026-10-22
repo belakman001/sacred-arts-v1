@@ -37,7 +37,6 @@ public class ClientEvents {
             event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.FIRE_FIST.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.BLADE.get(), ParticleOnlyRenderer::new);
-            event.registerEntityRenderer(ModEntities.SPEAR.get(), ThrownItemRenderer::new);
             event.registerEntityRenderer(ModEntities.NEEDLE.get(), ThrownItemRenderer::new);
         }
     }

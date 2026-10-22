@@ -6,7 +6,6 @@ import com.sacredarts.entity.FireFistEntity;
 import com.sacredarts.entity.ForgedWispEntity;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.entity.NeedleProjectileEntity;
-import com.sacredarts.entity.SpearProjectileEntity;
 import com.sacredarts.path.Path;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -31,21 +30,9 @@ public class HollowKingTechniques {
                 new Technique("the_hollow_spear", Path.HOLLOW_KING, TechniqueType.STRIKER, 10) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
                         double p = data.getPowerMultiplier();
-                        for (int i = 0; i < 2; i++) {
-                            SpearProjectileEntity spear = new SpearProjectileEntity(
-                                    ModEntities.SPEAR.get(), player, player.serverLevel());
-                            spear.setDamage((float) (5 * p));
-                            spear.setNoGravity(true);
-                            Vec3 dir = player.getLookAngle();
-                            double spread = (i == 0 ? -1 : 1) * 0.05;
-                            Vec3 v = dir.add(new Vec3(-dir.z, 0, dir.x).normalize().scale(spread))
-                                    .normalize().scale(2.5);
-                            spear.setDeltaMovement(v);
-                            spear.hurtMarked = true;
-                            player.serverLevel().addFreshEntity(spear);
-                        }
-                        player.serverLevel().playSound(null, player.blockPosition(),
-                                SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0f, 1.2f);
+                        // A white beacon-beam, fired twice in quick succession.
+                        whiteBeam(player, 16, (float) (5 * p));
+                        whiteBeam(player, 16, (float) (5 * p));
                     }
                 },
                 new Technique("hollow_kings_armor", Path.HOLLOW_KING, TechniqueType.ENFORCER, 12) {
@@ -113,7 +100,6 @@ public class HollowKingTechniques {
                 e -> e instanceof ForgedWispEntity
                         || e instanceof FireFistEntity
                         || e instanceof BladeProjectileEntity
-                        || e instanceof SpearProjectileEntity
                         || e instanceof NeedleProjectileEntity)) {
             e.discard();
         }

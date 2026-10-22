@@ -161,10 +161,10 @@ public class AdvancementHandler {
             {-0.15, 0.65, 0.1}, {0.15, 0.65, 0.1},
             {-0.15, 0.3, 0.1}, {0.15, 0.3, 0.1},
         };
-        // Random subset each tick for a shimmering spectral look.
+        // Random subset each tick for a shimmering, translucent spectral look.
         for (int i = 0; i < 12; i++) {
             double[] pt = points[player.getRandom().nextInt(points.length)];
-            level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WHITE_ASH,
                     base.x + pt[0], base.y + pt[1], base.z + pt[2],
                     1, 0.02, 0.02, 0.02, 0.01);
         }
@@ -225,7 +225,7 @@ public class AdvancementHandler {
         if (time % 20 == 0) {
             // Ringing, like struck steel — loud enough to hear.
             level.playSound(null, player.blockPosition(),
-                    net.minecraft.sounds.SoundEvents.ANVIL_HIT,
+                    net.minecraft.sounds.SoundEvents.BELL_RESONATE,
                     net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.2f);
         }
     }

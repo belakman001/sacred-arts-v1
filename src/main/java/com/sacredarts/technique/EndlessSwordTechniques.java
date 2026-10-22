@@ -63,7 +63,7 @@ public class EndlessSwordTechniques {
                         // For a time, every weapon near the caster strikes on its own.
                         data.setSwordAuraTicks((int) (10 * p) * 20);
                         player.serverLevel().playSound(null, player.blockPosition(),
-                                SoundEvents.ANVIL_HIT, SoundSource.PLAYERS, 1.0f, 1.0f);
+                                SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 1.0f, 1.0f);
                     }
                 },
                 new Technique("hidden_sword", Path.ENDLESS_SWORD, TechniqueType.FORGER, 12) {
