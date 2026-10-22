@@ -31,6 +31,17 @@ public class TechniqueHandler {
                 tech = list.get(slot);
             }
             // All techniques are unlocked from enrollment; they grow stronger with level.
+            // The Hollow Domain silences casting.
+            if (data.getSilenceTicks() > 0) {
+                player.displayClientMessage(
+                        Component.translatable("message.sacredarts.silenced"), true);
+                return;
+            }
+            if (!tech.canCast(player, data)) {
+                Component msg = tech.getCannotCastMessage();
+                if (msg != null) player.displayClientMessage(msg, true);
+                return;
+            }
             if (!data.spendMadra(tech.getMadraCost())) {
                 player.displayClientMessage(Component.translatable("message.sacredarts.no_madra"), true);
                 player.serverLevel().playSound(null, player.blockPosition(),

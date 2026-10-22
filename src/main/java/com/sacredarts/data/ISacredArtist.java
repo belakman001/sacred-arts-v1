@@ -81,4 +81,12 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     /** Endless Sword ruler: ticks of sword aura remaining. */
     int getSwordAuraTicks();
     void setSwordAuraTicks(int ticks);
+
+    /** Hollow King enforcer: ticks of spectral armor remaining. */
+    int getArmorTicks();
+    void setArmorTicks(int ticks);
+
+    /** Hollow Domain: ticks during which technique casting is blocked. */
+    int getSilenceTicks();
+    void setSilenceTicks(int ticks);
 }

@@ -1,6 +1,8 @@
 package com.sacredarts.entity;
 
 import com.sacredarts.technique.TechniqueHelper;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -12,7 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-/** Endless Sword striker: a thrown blade (renders as a flying iron sword). */
+/**
+ * Endless Sword striker: a flying crescent slash (invisible, leaves
+ * sweep-attack slice marks). Looks like The Endless Sword's aura.
+ */
 public class BladeProjectileEntity extends ThrowableItemProjectile {
     private float damage = 6;
 
@@ -35,12 +40,26 @@ public class BladeProjectileEntity extends ThrowableItemProjectile {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        // Slice-mark trail.
+        if (level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.SWEEP_ATTACK,
+                    getX(), getY() + 0.2, getZ(), 2, 0.3, 0.2, 0.3, 0);
+        }
+    }
+
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         Entity target = result.getEntity();
         Entity owner = getOwner();
         if (target instanceof LivingEntity living && owner instanceof ServerPlayer sp) {
             TechniqueHelper.hurt(living, sp, damage);
+            if (level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.SWEEP_ATTACK,
+                        target.getX(), target.getY() + 1, target.getZ(), 3, 0.5, 0.5, 0.5, 0);
+            }
         }
         discard();
     }

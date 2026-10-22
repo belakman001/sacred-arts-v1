@@ -83,11 +83,11 @@ public class FireFistEntity extends Entity {
         }
         setPos(to);
 
-        // Fist visual: dense ball of black + orange flame.
-        for (int i = 0; i < 5; i++) {
-            double ox = (random.nextDouble() - 0.5) * 0.7;
-            double oy = (random.nextDouble() - 0.5) * 0.7;
-            double oz = (random.nextDouble() - 0.5) * 0.7;
+        // Fist visual: a compact ball of black + orange flame (kept light on particles).
+        for (int i = 0; i < 2; i++) {
+            double ox = (random.nextDouble() - 0.5) * 0.5;
+            double oy = (random.nextDouble() - 0.5) * 0.5;
+            double oz = (random.nextDouble() - 0.5) * 0.5;
             serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE,
                     to.x + ox, to.y + 0.3 + oy, to.z + oz, 1, 0.05, 0.05, 0.05, 0.01);
             serverLevel.sendParticles(ParticleTypes.FLAME,

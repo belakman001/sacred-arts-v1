@@ -1,11 +1,16 @@
 package com.sacredarts.technique;
 
 import com.sacredarts.data.ISacredArtist;
+import com.sacredarts.entity.ModEntities;
+import com.sacredarts.entity.NeedleProjectileEntity;
 import com.sacredarts.path.Path;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -19,7 +24,7 @@ public class SandviperTechniques {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
                         double p = data.getPowerMultiplier();
                         for (int i = 0; i < 2; i++) {
-                            shootArrow(player, (float) (4 * p),
+                            shootNeedle(player, (float) (4 * p),
                                     new MobEffectInstance(MobEffects.POISON, (int) (200 * p), 0));
                         }
                     }
@@ -41,12 +46,32 @@ public class SandviperTechniques {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
                         double p = data.getPowerMultiplier();
                         for (int i = 0; i < 5; i++) {
-                            shootArrow(player, (float) (3 * p),
+                            shootNeedle(player, (float) (3 * p),
                                     new MobEffectInstance(MobEffects.POISON, (int) (160 * p), 0));
                         }
                     }
                 }
         );
+    }
+
+    /** Fires a bright toxic-green needle. */
+    private static void shootNeedle(ServerPlayer player, float damage, MobEffectInstance poison) {
+        NeedleProjectileEntity needle = new NeedleProjectileEntity(
+                ModEntities.NEEDLE.get(), player, player.serverLevel());
+        needle.setDamage(damage);
+        needle.setPoison(poison);
+        needle.setNoGravity(true);
+        Vec3 dir = player.getLookAngle();
+        // Slight spread.
+        Vec3 side = new Vec3(-dir.z, 0, dir.x).normalize();
+        double spread = (player.getRandom().nextDouble() - 0.5) * 0.12;
+        Vec3 v = dir.add(side.scale(spread)).add(0, (player.getRandom().nextDouble() - 0.5) * 0.05, 0)
+                .normalize().scale(2.8);
+        needle.setDeltaMovement(v);
+        needle.hurtMarked = true;
+        player.serverLevel().addFreshEntity(needle);
+        player.serverLevel().playSound(null, player.blockPosition(),
+                SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0f, 1.4f);
     }
 
     public static Technique ultimate() {

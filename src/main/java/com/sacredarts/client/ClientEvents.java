@@ -36,7 +36,9 @@ public class ClientEvents {
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.FIRE_FIST.get(), ParticleOnlyRenderer::new);
-            event.registerEntityRenderer(ModEntities.BLADE.get(), ThrownItemRenderer::new);
+            event.registerEntityRenderer(ModEntities.BLADE.get(), ParticleOnlyRenderer::new);
+            event.registerEntityRenderer(ModEntities.SPEAR.get(), ThrownItemRenderer::new);
+            event.registerEntityRenderer(ModEntities.NEEDLE.get(), ThrownItemRenderer::new);
         }
     }
 

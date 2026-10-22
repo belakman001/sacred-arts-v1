@@ -35,5 +35,15 @@ public abstract class Technique {
         return Component.translatable("technique.sacredarts." + id + ".desc");
     }
 
+    /** Whether this technique can be cast right now (e.g. Rippling Sword needs a held sword). */
+    public boolean canCast(ServerPlayer player, ISacredArtist data) {
+        return true;
+    }
+
+    /** Message shown when canCast is false. Null = no message. */
+    public Component getCannotCastMessage() {
+        return null;
+    }
+
     public abstract void cast(ServerPlayer player, ISacredArtist data);
 }

@@ -64,18 +64,18 @@ public final class TechniqueHelper {
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0f, 0.8f);
     }
 
-    /** Damages everything along the look vector. A thick black beacon-beam with an orange core. */
+    /** Damages everything along the look vector. A thick, dense BLACK beam with only a hint of orange. */
     public static void blackBeam(ServerPlayer player, double range, float damage, boolean ignite) {
         ServerLevel level = player.serverLevel();
         Vec3 eye = player.getEyePosition();
         Vec3 dir = player.getLookAngle();
-        for (double d = 1.0; d <= range; d += 0.5) {
+        for (double d = 1.0; d <= range; d += 0.4) {
             Vec3 p = eye.add(dir.scale(d));
-            // Thick black outer beam...
-            level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 6, 0.35, 0.35, 0.35, 0.02);
-            level.sendParticles(ParticleTypes.SMOKE, p.x, p.y, p.z, 4, 0.25, 0.25, 0.25, 0.02);
-            // ...with a hot orange core.
-            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 3, 0.12, 0.12, 0.12, 0.02);
+            // Dense black core — the dominant visual.
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 12, 0.45, 0.45, 0.45, 0.01);
+            level.sendParticles(ParticleTypes.SMOKE, p.x, p.y, p.z, 8, 0.3, 0.3, 0.3, 0.01);
+            // Just a whisper of orange at the center.
+            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 2, 0.1, 0.1, 0.1, 0.01);
             AABB box = new AABB(p.x - 1, p.y - 1, p.z - 1, p.x + 1, p.y + 1, p.z + 1);
             for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
                     e -> e != player && e.isAlive())) {

@@ -25,6 +25,8 @@ public class SacredArtist implements ISacredArtist {
     private float fistChargeDamage = 0;
     private int swordGlintTicks = 0;
     private int swordAuraTicks = 0;
+    private int armorTicks = 0;
+    private int silenceTicks = 0;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -111,6 +113,10 @@ public class SacredArtist implements ISacredArtist {
     @Override public void setSwordGlintTicks(int ticks) { this.swordGlintTicks = Math.max(0, ticks); }
     @Override public int getSwordAuraTicks() { return swordAuraTicks; }
     @Override public void setSwordAuraTicks(int ticks) { this.swordAuraTicks = Math.max(0, ticks); }
+    @Override public int getArmorTicks() { return armorTicks; }
+    @Override public void setArmorTicks(int ticks) { this.armorTicks = Math.max(0, ticks); }
+    @Override public int getSilenceTicks() { return silenceTicks; }
+    @Override public void setSilenceTicks(int ticks) { this.silenceTicks = Math.max(0, ticks); }
 
     @Override
     public CompoundTag serializeNBT() {
@@ -134,6 +140,8 @@ public class SacredArtist implements ISacredArtist {
         tag.putFloat("fistChargeDamage", fistChargeDamage);
         tag.putInt("swordGlintTicks", swordGlintTicks);
         tag.putInt("swordAuraTicks", swordAuraTicks);
+        tag.putInt("armorTicks", armorTicks);
+        tag.putInt("silenceTicks", silenceTicks);
         return tag;
     }
 
@@ -158,6 +166,8 @@ public class SacredArtist implements ISacredArtist {
         fistChargeDamage = tag.getFloat("fistChargeDamage");
         swordGlintTicks = tag.getInt("swordGlintTicks");
         swordAuraTicks = tag.getInt("swordAuraTicks");
+        armorTicks = tag.getInt("armorTicks");
+        silenceTicks = tag.getInt("silenceTicks");
         cycling = false;
     }
 

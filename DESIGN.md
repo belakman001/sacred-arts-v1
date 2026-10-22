@@ -165,6 +165,8 @@ v0.6 changes (2026-10-21): Black Flame flavor rework — Striker (Dragon's Breat
 
 v0.7 changes (2026-10-21): Wisp moved to Void Dragon's Dance (Ruler) with a longer 3s build-up (was on Cinder Claws by mistake). Cinder Claws (Forger) is now a charging fire fist that shoots forward as a particle projectile. Striker beam reworked into a thick black beacon-beam (denser core, wider); charge-up particles made smaller. The Dragon Descends gets far more particles. Endless Sword: Striker (Rippling Sword) now throws 3 flying iron-sword blades; Enforcer (Flowing Sword) has a silver glint for its whole duration; Ruler (Sword Aura Field) is now a 10s aura — slice marks in the air, ringing steel sound, and every weapon within 20 blocks (ground or held) damages entities within 3 blocks of it.
 
+v0.8 changes (2026-10-21): Black Flame striker beam made MUCH denser black (was mostly flame); Cinder Claw particles reduced. Sword Aura Field renamed to The Endless Sword (aura ring made louder). Rippling Sword now requires a held sword and fires crescent slash waves (invisible, sweep-trail) matching The Endless Sword's style. Hollow Bolt renamed to The Hollow Spear — glowing white trident projectiles. Hollow King's Armor now shows spectral white armor (particle shell) for its duration. Still Air renamed to The Hollow Domain (20 blocks): slows+weakens, clears active techniques/entities, silences casting for 5s. Sandviper grants poison immunity. Venom Spit/Needles now fire bright toxic-green needle projectiles.
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

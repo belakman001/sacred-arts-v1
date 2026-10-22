@@ -114,20 +114,70 @@ public class AdvancementHandler {
             tickSwordAura(player, data, time);
         }
 
+        // Hollow King enforcer: spectral armor.
+        if (data.getArmorTicks() > 0) {
+            data.setArmorTicks(data.getArmorTicks() - 1);
+            if (time % 2 == 0) {
+                spawnSpectralArmor(player);
+            }
+        }
+
+        // Hollow Domain silence countdown.
+        if (data.getSilenceTicks() > 0) {
+            data.setSilenceTicks(data.getSilenceTicks() - 1);
+        }
+
+        // Sandviper: immune to poison.
+        if (data.getPath() == com.sacredarts.path.Path.SANDVIPER) {
+            player.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
+        }
+
         // Keep the client's HUD and menus fresh.
         if (time % 40 == 0) {
             ModNetwork.syncPlayer(player);
         }
     }
 
-    /** A fist of black + orange flame forming in the hand. */
+    /** Spectral white armor: ghostly white particles in a humanoid shell. */
+    private static void spawnSpectralArmor(ServerPlayer player) {
+        net.minecraft.server.level.ServerLevel level = player.serverLevel();
+        net.minecraft.world.phys.Vec3 base = player.position();
+        // [x, y, z] armor points (symmetric, no yaw rotation needed).
+        double[][] points = {
+            // Helm
+            {0, 1.75, 0.25}, {0, 1.75, -0.25}, {0.25, 1.75, 0}, {-0.25, 1.75, 0},
+            {0, 2.0, 0},
+            // Pauldrons and cuirass
+            {-0.4, 1.5, 0}, {0.4, 1.5, 0},
+            {-0.32, 1.25, 0.18}, {0.32, 1.25, 0.18},
+            {-0.32, 1.25, -0.18}, {0.32, 1.25, -0.18},
+            {0, 1.25, 0.25}, {0, 1.25, -0.25},
+            {-0.3, 0.95, 0.15}, {0.3, 0.95, 0.15},
+            {-0.3, 0.95, -0.15}, {0.3, 0.95, -0.15},
+            // Vambraces
+            {-0.5, 1.15, 0}, {-0.5, 0.85, 0},
+            {0.5, 1.15, 0}, {0.5, 0.85, 0},
+            // Greaves
+            {-0.15, 0.65, 0.1}, {0.15, 0.65, 0.1},
+            {-0.15, 0.3, 0.1}, {0.15, 0.3, 0.1},
+        };
+        // Random subset each tick for a shimmering spectral look.
+        for (int i = 0; i < 12; i++) {
+            double[] pt = points[player.getRandom().nextInt(points.length)];
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,
+                    base.x + pt[0], base.y + pt[1], base.z + pt[2],
+                    1, 0.02, 0.02, 0.02, 0.01);
+        }
+    }
+
+    /** A fist of black + orange flame forming in the hand (kept light on particles). */
     private static void spawnFistCharge(ServerPlayer player, int elapsed, int total) {
         float progress = Math.min(1f, (float) elapsed / total);
         net.minecraft.world.phys.Vec3 eye = player.getEyePosition();
         net.minecraft.world.phys.Vec3 look = player.getLookAngle();
         net.minecraft.world.phys.Vec3 hand = eye.add(look.scale(0.6)).add(0, -0.35, 0);
-        double radius = 0.2 + progress * 0.35;
-        int count = 6 + (int) (progress * 10);
+        double radius = 0.15 + progress * 0.25;
+        int count = 3 + (int) (progress * 5);
         for (int i = 0; i < count; i++) {
             double a = player.getRandom().nextDouble() * Math.PI * 2;
             double b = player.getRandom().nextDouble() * Math.PI - Math.PI / 2;
@@ -173,10 +223,10 @@ public class AdvancementHandler {
             applySwordAuraDamage(player, data);
         }
         if (time % 20 == 0) {
-            // Ringing, like struck steel.
+            // Ringing, like struck steel — loud enough to hear.
             level.playSound(null, player.blockPosition(),
                     net.minecraft.sounds.SoundEvents.ANVIL_HIT,
-                    net.minecraft.sounds.SoundSource.PLAYERS, 0.4f, 1.9f);
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.2f);
         }
     }
 
