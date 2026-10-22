@@ -175,7 +175,7 @@ public class AdvancementHandler {
         if (time % 20 == 0) {
             // Ringing, like struck steel.
             level.playSound(null, player.blockPosition(),
-                    net.minecraft.sounds.SoundEvents.BLOCK_ANVIL_HIT,
+                    net.minecraft.sounds.SoundEvents.BLOCK_BELL_RESONATE,
                     net.minecraft.sounds.SoundSource.PLAYERS, 0.4f, 1.9f);
         }
     }
