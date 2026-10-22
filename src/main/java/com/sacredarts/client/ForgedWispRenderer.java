@@ -4,13 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.sacredarts.entity.ForgedWispEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 /** The wisp is pure particles — nothing to render. */
 public class ForgedWispRenderer extends EntityRenderer<ForgedWispEntity> {
-    public ForgedWispRenderer(EntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public ForgedWispRenderer(EntityRendererProvider.Context context) {
+        super(context);
     }
 
     @Override

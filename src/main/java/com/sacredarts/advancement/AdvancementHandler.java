@@ -5,6 +5,7 @@ import com.sacredarts.data.IronBody;
 import com.sacredarts.data.ISacredArtist;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.network.OpenIronBodyPacket;
+import com.sacredarts.technique.BlackFlameTechniques;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
