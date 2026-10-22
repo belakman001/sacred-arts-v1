@@ -1,6 +1,7 @@
 package com.sacredarts.technique;
 
 import com.sacredarts.data.ISacredArtist;
+import com.sacredarts.entity.FireFistEntity;
 import com.sacredarts.entity.ForgedWispEntity;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.path.Path;
@@ -17,6 +18,8 @@ import static com.sacredarts.technique.TechniqueHelper.*;
 public class BlackFlameTechniques {
     /** Ticks the striker's black ball charges in the hand before the beam fires. */
     public static final int STRIKER_CHARGE_TICKS = 25;
+    /** Ticks the fire fist charges in the hand before it shoots forward. */
+    public static final int FIST_CHARGE_TICKS = 20;
 
     public static List<Technique> create() {
         return List.of(
@@ -47,17 +50,7 @@ public class BlackFlameTechniques {
                 new Technique("void_dragons_dance", Path.BLACK_FLAME, TechniqueType.RULER, 14) {
                     @Override public void cast(ServerPlayer player, ISacredArtist data) {
                         double p = data.getPowerMultiplier();
-                        for (LivingEntity e : targetsAround(player, 6)) {
-                            hurt(e, player, (float) (6 * p));
-                            e.setSecondsOnFire((int) (6 * p));
-                        }
-                        particles(player, net.minecraft.core.particles.ParticleTypes.FLAME, 3, 40);
-                    }
-                },
-                new Technique("cinder_claws", Path.BLACK_FLAME, TechniqueType.FORGER, 10) {
-                    @Override public void cast(ServerPlayer player, ISacredArtist data) {
-                        double p = data.getPowerMultiplier();
-                        // Forge a wisp overhead: it builds for 2s, then hunts
+                        // Forge a wisp overhead: it builds for 3s, then hunts
                         // whoever the caster is looking at.
                         ForgedWispEntity wisp = new ForgedWispEntity(
                                 ModEntities.FORGED_WISP.get(), player.serverLevel());
@@ -69,6 +62,18 @@ public class BlackFlameTechniques {
                         player.serverLevel().playSound(null, player.blockPosition(),
                                 net.minecraft.sounds.SoundEvents.BLAZE_SHOOT,
                                 net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 0.7f);
+                    }
+                },
+                new Technique("cinder_claws", Path.BLACK_FLAME, TechniqueType.FORGER, 10) {
+                    @Override public void cast(ServerPlayer player, ISacredArtist data) {
+                        double p = data.getPowerMultiplier();
+                        // Charge a fire fist in the hand; it shoots forward when the
+                        // charge completes (handled in AdvancementHandler.tick).
+                        data.setFistChargeDamage((float) (10 * p));
+                        data.setFistChargeTicks(FIST_CHARGE_TICKS);
+                        player.serverLevel().playSound(null, player.blockPosition(),
+                                net.minecraft.sounds.SoundEvents.BLAZE_SHOOT,
+                                net.minecraft.sounds.SoundSource.PLAYERS, 0.7f, 0.6f);
                     }
                 }
         );
@@ -84,5 +89,19 @@ public class BlackFlameTechniques {
                 }
             }
         };
+    }
+
+    /** Fires the charged fire fist. Called from AdvancementHandler.tick. */
+    public static void fireFist(ServerPlayer player, ISacredArtist data) {
+        FireFistEntity fist = new FireFistEntity(
+                ModEntities.FIRE_FIST.get(), player.serverLevel());
+        fist.setOwner(player);
+        fist.setDamage(data.getFistChargeDamage());
+        Vec3 eye = player.getEyePosition();
+        Vec3 dir = player.getLookAngle();
+        Vec3 start = eye.add(dir.scale(1.0));
+        fist.setPos(start.x, start.y - 0.3, start.z);
+        fist.setDirection(dir);
+        player.serverLevel().addFreshEntity(fist);
     }
 }

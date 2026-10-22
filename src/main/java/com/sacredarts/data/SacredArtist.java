@@ -21,6 +21,10 @@ public class SacredArtist implements ISacredArtist {
     private int strikerChargeTicks = 0;
     private float strikerChargeDamage = 0;
     private int cloakTicks = 0;
+    private int fistChargeTicks = 0;
+    private float fistChargeDamage = 0;
+    private int swordGlintTicks = 0;
+    private int swordAuraTicks = 0;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -99,6 +103,14 @@ public class SacredArtist implements ISacredArtist {
     @Override public void setStrikerChargeDamage(float damage) { this.strikerChargeDamage = damage; }
     @Override public int getCloakTicks() { return cloakTicks; }
     @Override public void setCloakTicks(int ticks) { this.cloakTicks = Math.max(0, ticks); }
+    @Override public int getFistChargeTicks() { return fistChargeTicks; }
+    @Override public void setFistChargeTicks(int ticks) { this.fistChargeTicks = Math.max(0, ticks); }
+    @Override public float getFistChargeDamage() { return fistChargeDamage; }
+    @Override public void setFistChargeDamage(float damage) { this.fistChargeDamage = damage; }
+    @Override public int getSwordGlintTicks() { return swordGlintTicks; }
+    @Override public void setSwordGlintTicks(int ticks) { this.swordGlintTicks = Math.max(0, ticks); }
+    @Override public int getSwordAuraTicks() { return swordAuraTicks; }
+    @Override public void setSwordAuraTicks(int ticks) { this.swordAuraTicks = Math.max(0, ticks); }
 
     @Override
     public CompoundTag serializeNBT() {
@@ -118,6 +130,10 @@ public class SacredArtist implements ISacredArtist {
         tag.putInt("strikerChargeTicks", strikerChargeTicks);
         tag.putFloat("strikerChargeDamage", strikerChargeDamage);
         tag.putInt("cloakTicks", cloakTicks);
+        tag.putInt("fistChargeTicks", fistChargeTicks);
+        tag.putFloat("fistChargeDamage", fistChargeDamage);
+        tag.putInt("swordGlintTicks", swordGlintTicks);
+        tag.putInt("swordAuraTicks", swordAuraTicks);
         return tag;
     }
 
@@ -138,6 +154,10 @@ public class SacredArtist implements ISacredArtist {
         strikerChargeTicks = tag.getInt("strikerChargeTicks");
         strikerChargeDamage = tag.getFloat("strikerChargeDamage");
         cloakTicks = tag.getInt("cloakTicks");
+        fistChargeTicks = tag.getInt("fistChargeTicks");
+        fistChargeDamage = tag.getFloat("fistChargeDamage");
+        swordGlintTicks = tag.getInt("swordGlintTicks");
+        swordAuraTicks = tag.getInt("swordAuraTicks");
         cycling = false;
     }
 

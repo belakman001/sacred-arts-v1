@@ -27,7 +27,7 @@ import java.util.UUID;
  * Pure particles — no model (see ForgedWispRenderer, intentionally empty).
  */
 public class ForgedWispEntity extends Entity {
-    private static final int CHARGE_TIME = 40; // 2 seconds of build-up
+    private static final int CHARGE_TIME = 60; // 3 seconds of build-up
     private static final int HUNT_TIMEOUT = 120; // 6 seconds of hunting, then fizzle
 
     private int age = 0;

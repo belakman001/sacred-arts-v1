@@ -18,4 +18,20 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .updateInterval(1)
                     .build("forged_wisp"));
+
+    public static final RegistryObject<EntityType<FireFistEntity>> FIRE_FIST =
+            TYPES.register("fire_fist", () -> EntityType.Builder
+                    .<FireFistEntity>of(FireFistEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 0.6F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build("fire_fist"));
+
+    public static final RegistryObject<EntityType<BladeProjectileEntity>> BLADE =
+            TYPES.register("blade", () -> EntityType.Builder
+                    .<BladeProjectileEntity>of(BladeProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build("blade"));
 }

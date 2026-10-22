@@ -67,4 +67,18 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     /** Black Flame enforcer: ticks of flame particles remaining. */
     int getCloakTicks();
     void setCloakTicks(int ticks);
+
+    /** Black Flame forger fire fist: charge ticks remaining, 0 = not charging. */
+    int getFistChargeTicks();
+    void setFistChargeTicks(int ticks);
+    float getFistChargeDamage();
+    void setFistChargeDamage(float damage);
+
+    /** Endless Sword enforcer: ticks of silver glint remaining. */
+    int getSwordGlintTicks();
+    void setSwordGlintTicks(int ticks);
+
+    /** Endless Sword ruler: ticks of sword aura remaining. */
+    int getSwordAuraTicks();
+    void setSwordAuraTicks(int ticks);
 }

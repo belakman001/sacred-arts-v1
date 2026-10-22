@@ -163,6 +163,8 @@ v0.5 changes (2026-10-21): Copper Sight toggle (G keybind + server packet, persi
 
 v0.6 changes (2026-10-21): Black Flame flavor rework — Striker (Dragon's Breath) now charges a growing black ball in the hand (~1.25s) then fires a black beam (aim at fire time); Enforcer (Burning Cloak) wreathed in black/orange flames for the full speed-boost duration; Forger (Cinder Claws) reworked into a Forged Wisp entity that builds overhead for 2s (black/orange particles, hand flames on caster) then hunts the caster's look target and detonates; Ultimate (The Dragon Descends) erupts in black/orange flame. Done button removed from stats menu (K/ESC close it).
 
+v0.7 changes (2026-10-21): Wisp moved to Void Dragon's Dance (Ruler) with a longer 3s build-up (was on Cinder Claws by mistake). Cinder Claws (Forger) is now a charging fire fist that shoots forward as a particle projectile. Striker beam reworked into a thick black beacon-beam (denser core, wider); charge-up particles made smaller. The Dragon Descends gets far more particles. Endless Sword: Striker (Rippling Sword) now throws 3 flying iron-sword blades; Enforcer (Flowing Sword) has a silver glint for its whole duration; Ruler (Sword Aura Field) is now a 10s aura — slice marks in the air, ringing steel sound, and every weapon within 20 blocks (ground or held) damages entities within 3 blocks of it.
+
 ## Technical notes (Forge 1.20.1)
 
 - Player data via Forge capabilities (stage, Path, mastery, madra, iron body, goldsign).

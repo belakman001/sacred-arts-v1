@@ -64,15 +64,18 @@ public final class TechniqueHelper {
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0f, 0.8f);
     }
 
-    /** Damages everything along the look vector, with black + orange flame particles. */
+    /** Damages everything along the look vector. A thick black beacon-beam with an orange core. */
     public static void blackBeam(ServerPlayer player, double range, float damage, boolean ignite) {
         ServerLevel level = player.serverLevel();
         Vec3 eye = player.getEyePosition();
         Vec3 dir = player.getLookAngle();
-        for (double d = 1.0; d <= range; d += 0.75) {
+        for (double d = 1.0; d <= range; d += 0.5) {
             Vec3 p = eye.add(dir.scale(d));
-            level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 3, 0.2, 0.2, 0.2, 0.02);
-            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 2, 0.15, 0.15, 0.15, 0.02);
+            // Thick black outer beam...
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 6, 0.35, 0.35, 0.35, 0.02);
+            level.sendParticles(ParticleTypes.SMOKE, p.x, p.y, p.z, 4, 0.25, 0.25, 0.25, 0.02);
+            // ...with a hot orange core.
+            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 3, 0.12, 0.12, 0.12, 0.02);
             AABB box = new AABB(p.x - 1, p.y - 1, p.z - 1, p.x + 1, p.y + 1, p.z + 1);
             for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,
                     e -> e != player && e.isAlive())) {
@@ -90,9 +93,11 @@ public final class TechniqueHelper {
 
     public static void blackBurstAt(ServerLevel level, Vec3 pos, double radius, float damage,
                                     ServerPlayer src) {
-        level.sendParticles(ParticleTypes.LARGE_SMOKE, pos.x, pos.y, pos.z, 16, 1.5, 1.0, 1.5, 0.05);
-        level.sendParticles(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 16, 1.5, 1.0, 1.5, 0.05);
-        level.sendParticles(ParticleTypes.LAVA, pos.x, pos.y, pos.z, 8, 1.0, 1.0, 1.0, 0.1);
+        // A LOT of particles: towering black smoke, orange flame, lava sparks.
+        level.sendParticles(ParticleTypes.LARGE_SMOKE, pos.x, pos.y, pos.z, 40, 2.0, 1.5, 2.0, 0.08);
+        level.sendParticles(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 30, 1.5, 1.2, 1.5, 0.06);
+        level.sendParticles(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 40, 2.0, 1.5, 2.0, 0.08);
+        level.sendParticles(ParticleTypes.LAVA, pos.x, pos.y, pos.z, 20, 1.5, 1.5, 1.5, 0.15);
         AABB box = new AABB(pos.x - radius, pos.y - radius, pos.z - radius,
                 pos.x + radius, pos.y + radius, pos.z + radius);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box,

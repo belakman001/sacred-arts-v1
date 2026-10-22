@@ -88,20 +88,46 @@ public class AdvancementHandler {
             }
         }
 
+        // Black Flame forger fire fist charge-up: a fist of flame forms, then shoots forward.
+        if (data.getFistChargeTicks() > 0) {
+            int left = data.getFistChargeTicks() - 1;
+            data.setFistChargeTicks(left);
+            spawnFistCharge(player,
+                    BlackFlameTechniques.FIST_CHARGE_TICKS - left,
+                    BlackFlameTechniques.FIST_CHARGE_TICKS);
+            if (left <= 0) {
+                com.sacredarts.technique.BlackFlameTechniques.fireFist(player, data);
+            }
+        }
+
+        // Endless Sword enforcer: silver glint for the whole duration.
+        if (data.getSwordGlintTicks() > 0) {
+            data.setSwordGlintTicks(data.getSwordGlintTicks() - 1);
+            if (time % 2 == 0) {
+                spawnSwordGlint(player);
+            }
+        }
+
+        // Endless Sword ruler: sword aura field.
+        if (data.getSwordAuraTicks() > 0) {
+            data.setSwordAuraTicks(data.getSwordAuraTicks() - 1);
+            tickSwordAura(player, data, time);
+        }
+
         // Keep the client's HUD and menus fresh.
         if (time % 40 == 0) {
             ModNetwork.syncPlayer(player);
         }
     }
 
-    /** Growing black ball in the hand: dark smoke core + orange flame wisps. */
-    private static void spawnChargeBall(ServerPlayer player, int elapsed, int total) {
+    /** A fist of black + orange flame forming in the hand. */
+    private static void spawnFistCharge(ServerPlayer player, int elapsed, int total) {
         float progress = Math.min(1f, (float) elapsed / total);
         net.minecraft.world.phys.Vec3 eye = player.getEyePosition();
         net.minecraft.world.phys.Vec3 look = player.getLookAngle();
         net.minecraft.world.phys.Vec3 hand = eye.add(look.scale(0.6)).add(0, -0.35, 0);
-        double radius = 0.2 + progress * 0.55;
-        int count = 6 + (int) (progress * 14);
+        double radius = 0.2 + progress * 0.35;
+        int count = 6 + (int) (progress * 10);
         for (int i = 0; i < count; i++) {
             double a = player.getRandom().nextDouble() * Math.PI * 2;
             double b = player.getRandom().nextDouble() * Math.PI - Math.PI / 2;
@@ -112,6 +138,120 @@ public class AdvancementHandler {
                     x, y, z, 1, 0.03, 0.03, 0.03, 0.01);
             player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,
                     x, y, z, 1, 0.03, 0.03, 0.03, 0.01);
+        }
+    }
+
+    /** Silver glint swirling around the player. */
+    private static void spawnSwordGlint(ServerPlayer player) {
+        net.minecraft.world.phys.Vec3 pos = player.position();
+        double angle = player.getRandom().nextDouble() * Math.PI * 2;
+        double r = 0.8;
+        double x = pos.x + Math.cos(angle) * r;
+        double z = pos.z + Math.sin(angle) * r;
+        double y = pos.y + player.getRandom().nextDouble() * 1.8;
+        player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,
+                x, y, z, 1, 0.05, 0.05, 0.05, 0.02);
+    }
+
+    /** Sword Aura Field: slice marks in the air, a ringing sound, and every weapon
+     *  near the caster strikes entities around it (even held weapons). */
+    private static void tickSwordAura(ServerPlayer player,
+                                      com.sacredarts.data.ISacredArtist data, long time) {
+        net.minecraft.server.level.ServerLevel level = player.serverLevel();
+        net.minecraft.world.phys.Vec3 center = player.position();
+
+        if (time % 10 == 0) {
+            // Slice marks in the air around the caster.
+            for (int i = 0; i < 4; i++) {
+                double x = center.x + (player.getRandom().nextDouble() - 0.5) * 8;
+                double y = center.y + 1 + player.getRandom().nextDouble() * 2;
+                double z = center.z + (player.getRandom().nextDouble() - 0.5) * 8;
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK,
+                        x, y, z, 1, 0, 0, 0, 0);
+            }
+            // Every weapon within 20 blocks strikes entities within 3 blocks of it.
+            applySwordAuraDamage(player, data);
+        }
+        if (time % 20 == 0) {
+            // Ringing, like struck steel.
+            level.playSound(null, player.blockPosition(),
+                    net.minecraft.sounds.SoundEvents.BLOCK_ANVIL_LAND,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 0.4f, 1.9f);
+        }
+    }
+
+    private static void applySwordAuraDamage(ServerPlayer player,
+                                             com.sacredarts.data.ISacredArtist data) {
+        float damage = (float) (5 * data.getPowerMultiplier());
+        net.minecraft.server.level.ServerLevel level = player.serverLevel();
+        net.minecraft.world.phys.Vec3 center = player.position();
+        net.minecraft.world.phys.AABB scan = new net.minecraft.world.phys.AABB(
+                center.x - 20, center.y - 10, center.z - 20,
+                center.x + 20, center.y + 10, center.z + 20);
+
+        // Weapons lying on the ground.
+        for (net.minecraft.world.entity.item.ItemEntity item :
+                level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, scan)) {
+            if (isWeapon(item.getItem())) {
+                swordAuraStrike(level, player, item.position(), null, damage);
+            }
+        }
+        // Weapons being held (players and mobs, either hand).
+        for (net.minecraft.world.entity.LivingEntity e :
+                level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, scan)) {
+            if (isWeapon(e.getMainHandItem())) {
+                swordAuraStrike(level, player, e.position(), e, damage);
+            }
+            if (isWeapon(e.getOffhandItem())) {
+                swordAuraStrike(level, player, e.position(), e, damage);
+            }
+        }
+    }
+
+    private static void swordAuraStrike(net.minecraft.server.level.ServerLevel level,
+                                        ServerPlayer caster,
+                                        net.minecraft.world.phys.Vec3 weaponPos,
+                                        @javax.annotation.Nullable
+                                        net.minecraft.world.entity.LivingEntity holder,
+                                        float damage) {
+        net.minecraft.world.phys.AABB hit = new net.minecraft.world.phys.AABB(
+                weaponPos.x - 3, weaponPos.y - 3, weaponPos.z - 3,
+                weaponPos.x + 3, weaponPos.y + 3, weaponPos.z + 3);
+        for (net.minecraft.world.entity.LivingEntity victim :
+                level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, hit,
+                        v -> v != caster && v != holder && v.isAlive()
+                                && v.distanceToSqr(weaponPos) <= 9)) {
+            com.sacredarts.technique.TechniqueHelper.hurt(victim, caster, damage);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK,
+                    victim.getX(), victim.getY() + 1, victim.getZ(), 1, 0, 0, 0, 0);
+        }
+    }
+
+    private static boolean isWeapon(net.minecraft.world.item.ItemStack stack) {
+        net.minecraft.world.item.Item item = stack.getItem();
+        return item instanceof net.minecraft.world.item.SwordItem
+                || item instanceof net.minecraft.world.item.AxeItem
+                || item instanceof net.minecraft.world.item.TridentItem;
+    }
+
+    /** Small, dense black ball in the hand: dark smoke core + orange flame wisps. */
+    private static void spawnChargeBall(ServerPlayer player, int elapsed, int total) {
+        float progress = Math.min(1f, (float) elapsed / total);
+        net.minecraft.world.phys.Vec3 eye = player.getEyePosition();
+        net.minecraft.world.phys.Vec3 look = player.getLookAngle();
+        net.minecraft.world.phys.Vec3 hand = eye.add(look.scale(0.6)).add(0, -0.35, 0);
+        double radius = 0.15 + progress * 0.3;
+        int count = 4 + (int) (progress * 8);
+        for (int i = 0; i < count; i++) {
+            double a = player.getRandom().nextDouble() * Math.PI * 2;
+            double b = player.getRandom().nextDouble() * Math.PI - Math.PI / 2;
+            double x = hand.x + Math.cos(a) * Math.cos(b) * radius;
+            double y = hand.y + Math.sin(b) * radius;
+            double z = hand.z + Math.sin(a) * Math.cos(b) * radius;
+            player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE,
+                    x, y, z, 1, 0.02, 0.02, 0.02, 0.01);
+            player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,
+                    x, y, z, 1, 0.02, 0.02, 0.02, 0.01);
         }
     }
 

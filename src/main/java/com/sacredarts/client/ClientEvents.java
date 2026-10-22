@@ -1,7 +1,6 @@
 package com.sacredarts.client;
 
 import com.sacredarts.SacredArts;
-import com.sacredarts.client.ForgedWispRenderer;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.network.CastTechniquePacket;
 import com.sacredarts.network.CyclePacket;
@@ -9,6 +8,7 @@ import com.sacredarts.network.ModNetwork;
 import com.sacredarts.network.ToggleCopperSightPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -34,7 +34,9 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ForgedWispRenderer::new);
+            event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ParticleOnlyRenderer::new);
+            event.registerEntityRenderer(ModEntities.FIRE_FIST.get(), ParticleOnlyRenderer::new);
+            event.registerEntityRenderer(ModEntities.BLADE.get(), ThrownItemRenderer::new);
         }
     }
 
