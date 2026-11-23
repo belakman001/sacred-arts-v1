@@ -101,4 +101,9 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     /** Oakheart Deep Roots: ticks of knockback immunity remaining. */
     int getOakheartRootTicks();
     void setOakheartRootTicks(int ticks);
+
+    /** Stored vital aura, attuned to this Path (0-100). Gathered by cycling. */
+    double getAura();
+    void setAura(double aura);
+    void addAura(double amount);
 }

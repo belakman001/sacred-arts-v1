@@ -23,6 +23,7 @@ public class ClientData {
     public static int stageMaxLevel = 5;
     public static boolean copperSightEnabled = true;
     public static boolean jadeSenseEnabled = false;
+    public static double aura = 0;
     /** Spirit Scan readout (client-only, set by SpiritScanResultPacket). */
     public static String scanText = null;
     public static long scanExpiryTick = 0;
@@ -32,7 +33,7 @@ public class ClientData {
                               double cycledTotal, String ironBodyId, boolean goldsign,
                               boolean cycling, int level, int levelXp, int xpForNext,
                               int stageMaxLevel, boolean copperSightEnabled,
-                              boolean jadeSenseEnabled) {
+                              boolean jadeSenseEnabled, double aura) {
         ClientData.enrolled = enrolled;
         ClientData.pathId = pathId;
         ClientData.stageId = stageId;
@@ -50,5 +51,6 @@ public class ClientData {
         ClientData.stageMaxLevel = stageMaxLevel;
         ClientData.copperSightEnabled = copperSightEnabled;
         ClientData.jadeSenseEnabled = jadeSenseEnabled;
+        ClientData.aura = aura;
     }
 }

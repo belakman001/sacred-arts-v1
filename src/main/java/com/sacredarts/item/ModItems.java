@@ -16,4 +16,8 @@ public class ModItems {
             ITEMS.register("remnant_core", RemnantCoreItem::new);
     public static final RegistryObject<Item> MADRA_PILL =
             ITEMS.register("madra_pill", MadraPillItem::new);
+    public static final RegistryObject<Item> AURA_VIAL =
+            ITEMS.register("aura_vial", AuraVialItem::new);
+    public static final RegistryObject<Item> FILLED_AURA_VIAL =
+            ITEMS.register("filled_aura_vial", FilledAuraVialItem::new);
 }

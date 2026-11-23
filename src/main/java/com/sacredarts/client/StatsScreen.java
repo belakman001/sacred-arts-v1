@@ -77,6 +77,8 @@ public class StatsScreen extends Screen {
 
         y = line(g, x, y, label("stats.sacredarts.madra") + ": "
                 + (int) ClientData.madra + " / " + (int) ClientData.maxMadra);
+        y = line(g, x, y, label("stats.sacredarts.aura") + ": "
+                + (int) ClientData.aura + " / 100");
         y = line(g, x, y, label("stats.sacredarts.mastery") + ": " + ClientData.mastery
                 + "    " + label("stats.sacredarts.kills") + ": " + ClientData.kills);
         y = line(g, x, y, label("stats.sacredarts.iron_body") + ": "

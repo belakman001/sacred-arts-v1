@@ -68,6 +68,8 @@ public class SacredArts {
                         output.accept(ModItems.FOUNDATION_MANUAL.get());
                         output.accept(ModItems.REMNANT_CORE.get());
                         output.accept(ModItems.MADRA_PILL.get());
+                        output.accept(ModItems.AURA_VIAL.get());
+                        output.accept(ModItems.FILLED_AURA_VIAL.get());
                     })
                     .build());
 
@@ -123,6 +125,13 @@ public class SacredArts {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
+        // Slain hostile mobs sometimes leave a Remnant behind.
+        if (event.getEntity() instanceof Enemy
+                && event.getEntity() instanceof net.minecraft.world.entity.LivingEntity dead
+                && dead.level() instanceof net.minecraft.server.level.ServerLevel serverLevel
+                && dead.getRandom().nextFloat() < 0.4f) {
+            com.sacredarts.entity.RemnantEntity.spawnFor(serverLevel, dead);
+        }
         if (event.getSource().getEntity() instanceof ServerPlayer sp && event.getEntity() instanceof Enemy) {
             sp.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
                 if (!data.isEnrolled()) return;

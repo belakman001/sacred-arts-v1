@@ -30,6 +30,7 @@ public class SacredArtist implements ISacredArtist {
     private int silenceTicks = 0;
     private int ironBodyCooldownTicks = 0;
     private int oakheartRootTicks = 0;
+    private double aura = 0;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -128,6 +129,10 @@ public class SacredArtist implements ISacredArtist {
     @Override public int getOakheartRootTicks() { return oakheartRootTicks; }
     @Override public void setOakheartRootTicks(int ticks) { this.oakheartRootTicks = Math.max(0, ticks); }
 
+    @Override public double getAura() { return aura; }
+    @Override public void setAura(double aura) { this.aura = Math.max(0, Math.min(100, aura)); }
+    @Override public void addAura(double amount) { setAura(aura + amount); }
+
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
@@ -155,6 +160,7 @@ public class SacredArtist implements ISacredArtist {
         tag.putInt("silenceTicks", silenceTicks);
         tag.putInt("ironBodyCooldownTicks", ironBodyCooldownTicks);
         tag.putInt("oakheartRootTicks", oakheartRootTicks);
+        tag.putDouble("aura", aura);
         return tag;
     }
 
@@ -184,6 +190,7 @@ public class SacredArtist implements ISacredArtist {
         silenceTicks = tag.getInt("silenceTicks");
         ironBodyCooldownTicks = tag.getInt("ironBodyCooldownTicks");
         oakheartRootTicks = tag.getInt("oakheartRootTicks");
+        aura = tag.getDouble("aura");
         cycling = false;
     }
 
@@ -200,5 +207,6 @@ public class SacredArtist implements ISacredArtist {
         this.ironBody = IronBody.NONE;
         this.goldsign = false;
         this.cycling = false;
+        this.aura = 0;
     }
 }

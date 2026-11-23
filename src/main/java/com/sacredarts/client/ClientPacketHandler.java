@@ -15,7 +15,8 @@ public class ClientPacketHandler {
                 msg.getMadra(), msg.getMaxMadra(), msg.getMastery(), msg.getKills(),
                 msg.getCycledTotal(), msg.getIronBodyId(), msg.hasGoldsign(),
                 msg.isCycling(), msg.getLevel(), msg.getLevelXp(), msg.getXpForNext(),
-                msg.getStageMaxLevel(), msg.isCopperSightEnabled(), msg.isJadeSenseEnabled());
+                msg.getStageMaxLevel(), msg.isCopperSightEnabled(), msg.isJadeSenseEnabled(),
+                msg.getAura());
     }
 
     /** Server answered a Spirit Scan: show the readout briefly. */

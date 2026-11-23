@@ -40,6 +40,10 @@ public class AdvancementHandler {
                 player.serverLevel().sendParticles(ParticleTypes.END_ROD,
                         p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.02);
             }
+            if (time % 20 == 0) {
+                absorbAura(player, data, max);
+                absorbRemnant(player, data);
+            }
         } else {
             data.setMadra(data.getMadra() + max * SacredArtsConfig.PASSIVE_REGEN_PCT.get() / 20.0);
         }
@@ -378,6 +382,55 @@ public class AdvancementHandler {
             team.setColor(color);
         }
         return team;
+    }
+
+    /**
+     * Cycling in a biome that breathes your Path's aura draws it in: stored
+     * vital aura grows, with a small madra trickle and motes streaming in.
+     */
+    private static void absorbAura(ServerPlayer player, ISacredArtist data, double max) {
+        com.sacredarts.aura.AuraType[] biomeAuras =
+                com.sacredarts.aura.AuraHelper.getBiomeAuras(player.serverLevel(), player.blockPosition());
+        com.sacredarts.aura.AuraType match = null;
+        outer:
+        for (com.sacredarts.aura.AuraType a : biomeAuras) {
+            for (com.sacredarts.aura.AuraType b : data.getPath().getAuraTypes()) {
+                if (a == b) {
+                    match = a;
+                    break outer;
+                }
+            }
+        }
+        if (match == null) return;
+        data.addAura(2);
+        data.setMadra(data.getMadra() + max * 0.02);
+        for (int i = 0; i < 6; i++) {
+            double ang = player.getRandom().nextDouble() * Math.PI * 2;
+            double x = player.getX() + Math.cos(ang) * 2.5;
+            double z = player.getZ() + Math.sin(ang) * 2.5;
+            double y = player.getY() + 0.5 + player.getRandom().nextDouble() * 1.5;
+            net.minecraft.world.phys.Vec3 dir = player.position().add(0, 1, 0)
+                    .subtract(x, y, z).normalize().scale(0.15);
+            player.serverLevel().sendParticles(match.dust(0.9f), x, y, z, 0, dir.x, dir.y, dir.z, 1);
+        }
+    }
+
+    /** Cycling near a Remnant absorbs its spirit: madra and Path Mastery. */
+    private static void absorbRemnant(ServerPlayer player, ISacredArtist data) {
+        var pos = player.position();
+        AABB box = new AABB(pos.x - 6, pos.y - 3, pos.z - 6, pos.x + 6, pos.y + 3, pos.z + 6);
+        var remnants = player.level().getEntitiesOfClass(
+                com.sacredarts.entity.RemnantEntity.class, box, e -> true);
+        if (remnants.isEmpty()) return;
+        com.sacredarts.entity.RemnantEntity remnant = remnants.get(0);
+        data.setMadra(data.getMadra() + 10);
+        data.addMastery(2);
+        data.addLevelXp(5);
+        var p = remnant.position().add(0, 1, 0);
+        player.serverLevel().sendParticles(remnant.dust(1.4f), p.x, p.y, p.z, 20, 0.5, 0.6, 0.5, 0.08);
+        remnant.discard();
+        player.displayClientMessage(Component.translatable("message.sacredarts.remnant_absorbed"), true);
+        ModNetwork.syncPlayer(player);
     }
 
     private static void checkAdvancement(ServerPlayer player, ISacredArtist data) {

@@ -26,6 +26,7 @@ public class SyncDataPacket {
     private final int stageMaxLevel;
     private final boolean copperSightEnabled;
     private final boolean jadeSenseEnabled;
+    private final double aura;
 
     public SyncDataPacket(ISacredArtist data) {
         this.enrolled = data.isEnrolled();
@@ -45,6 +46,7 @@ public class SyncDataPacket {
         this.stageMaxLevel = data.getStage().getMaxLevel();
         this.copperSightEnabled = data.isCopperSightEnabled();
         this.jadeSenseEnabled = data.isJadeSenseEnabled();
+        this.aura = data.getAura();
     }
 
     public SyncDataPacket(FriendlyByteBuf buf) {
@@ -65,6 +67,7 @@ public class SyncDataPacket {
         this.stageMaxLevel = buf.readInt();
         this.copperSightEnabled = buf.readBoolean();
         this.jadeSenseEnabled = buf.readBoolean();
+        this.aura = buf.readDouble();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -85,6 +88,7 @@ public class SyncDataPacket {
         buf.writeInt(stageMaxLevel);
         buf.writeBoolean(copperSightEnabled);
         buf.writeBoolean(jadeSenseEnabled);
+        buf.writeDouble(aura);
     }
 
     public static void handle(SyncDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -109,4 +113,5 @@ public class SyncDataPacket {
     public int getStageMaxLevel() { return stageMaxLevel; }
     public boolean isCopperSightEnabled() { return copperSightEnabled; }
     public boolean isJadeSenseEnabled() { return jadeSenseEnabled; }
+    public double getAura() { return aura; }
 }

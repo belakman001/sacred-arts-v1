@@ -42,4 +42,12 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .updateInterval(1)
                     .build("needle"));
+
+    public static final RegistryObject<EntityType<RemnantEntity>> REMNANT =
+            TYPES.register("remnant", () -> EntityType.Builder
+                    .<RemnantEntity>of(RemnantEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build("remnant"));
 }

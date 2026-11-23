@@ -32,5 +32,12 @@ public class MadraOverlay {
         g.drawString(mc.font, label, lx, y - 11, 0xE0E0E0, false);
         String nums = (int) madra + " / " + (int) maxMadra;
         g.drawString(mc.font, nums, x + barW / 2 - mc.font.width(nums) / 2, y + 8, 0x93C5FD, false);
+        // Stored vital aura: thin gold bar under the madra bar.
+        int ay = y + 18;
+        g.fill(x - 1, ay - 1, x + barW + 1, ay + 3 + 1, 0xFF0B0B18);
+        float aPct = (float) Math.min(1.0, ClientData.aura / 100.0);
+        g.fill(x, ay, x + (int) (barW * aPct), ay + 3, 0xFFF59E0B);
+        String aNums = (int) ClientData.aura + " aura";
+        g.drawString(mc.font, aNums, x + barW / 2 - mc.font.width(aNums) / 2, ay + 5, 0xF59E0B, false);
     }
 }
