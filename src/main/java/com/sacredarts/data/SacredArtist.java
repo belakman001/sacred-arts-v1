@@ -18,6 +18,7 @@ public class SacredArtist implements ISacredArtist {
     private boolean goldsign = false;
     private boolean cycling = false;
     private boolean copperSightEnabled = true;
+    private boolean jadeSenseEnabled = false;
     private int strikerChargeTicks = 0;
     private float strikerChargeDamage = 0;
     private int cloakTicks = 0;
@@ -99,6 +100,9 @@ public class SacredArtist implements ISacredArtist {
     @Override public boolean isCopperSightEnabled() { return copperSightEnabled; }
     @Override public void setCopperSightEnabled(boolean enabled) { this.copperSightEnabled = enabled; }
 
+    @Override public boolean isJadeSenseEnabled() { return jadeSenseEnabled; }
+    @Override public void setJadeSenseEnabled(boolean enabled) { this.jadeSenseEnabled = enabled; }
+
     @Override public int getStrikerChargeTicks() { return strikerChargeTicks; }
     @Override public void setStrikerChargeTicks(int ticks) { this.strikerChargeTicks = Math.max(0, ticks); }
     @Override public float getStrikerChargeDamage() { return strikerChargeDamage; }
@@ -133,6 +137,7 @@ public class SacredArtist implements ISacredArtist {
         tag.putString("ironBody", ironBody.getId());
         tag.putBoolean("goldsign", goldsign);
         tag.putBoolean("copperSightEnabled", copperSightEnabled);
+        tag.putBoolean("jadeSenseEnabled", jadeSenseEnabled);
         tag.putInt("strikerChargeTicks", strikerChargeTicks);
         tag.putFloat("strikerChargeDamage", strikerChargeDamage);
         tag.putInt("cloakTicks", cloakTicks);
@@ -159,6 +164,7 @@ public class SacredArtist implements ISacredArtist {
         ironBody = IronBody.byId(tag.getString("ironBody"));
         goldsign = tag.getBoolean("goldsign");
         copperSightEnabled = !tag.contains("copperSightEnabled") || tag.getBoolean("copperSightEnabled");
+        jadeSenseEnabled = tag.getBoolean("jadeSenseEnabled");
         strikerChargeTicks = tag.getInt("strikerChargeTicks");
         strikerChargeDamage = tag.getFloat("strikerChargeDamage");
         cloakTicks = tag.getInt("cloakTicks");

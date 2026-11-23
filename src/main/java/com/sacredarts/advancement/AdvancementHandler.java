@@ -58,6 +58,31 @@ public class AdvancementHandler {
             }
         }
 
+        // Jade Sense: every living thing glows through walls, color-coded —
+        // hostile red, passive green, other players white (toggle with J).
+        if (data.getStage().atLeast(Stage.JADE) && data.isJadeSenseEnabled() && time % 20 == 0) {
+            var pos = player.position();
+            AABB box = new AABB(pos.x - 32, pos.y - 32, pos.z - 32, pos.x + 32, pos.y + 32, pos.z + 32);
+            net.minecraft.world.scores.Scoreboard scoreboard =
+                    player.serverLevel().getServer().getScoreboard();
+            net.minecraft.world.scores.PlayerTeam hostile =
+                    getOrCreateTeam(scoreboard, "sacredarts_hostile", net.minecraft.ChatFormatting.RED);
+            net.minecraft.world.scores.PlayerTeam passive =
+                    getOrCreateTeam(scoreboard, "sacredarts_passive", net.minecraft.ChatFormatting.GREEN);
+            for (LivingEntity e : player.level().getEntitiesOfClass(LivingEntity.class, box,
+                    e -> e != player && e.isAlive())) {
+                if (e instanceof net.minecraft.world.entity.player.Player) {
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, false, false, true));
+                } else if (e instanceof Enemy) {
+                    scoreboard.addPlayerToTeam(e.getScoreboardName(), hostile);
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, false, false, true));
+                } else {
+                    scoreboard.addPlayerToTeam(e.getScoreboardName(), passive);
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, false, false, true));
+                }
+            }
+        }
+
         // Iron Body passives.
         if (data.getIronBody() == IronBody.BLOODFORGED && time % 100 == 0) {
             if (player.getHealth() < player.getMaxHealth()) {
@@ -317,6 +342,17 @@ public class AdvancementHandler {
                 x, y, z, 1, 0.08, 0.08, 0.08, 0.01);
         player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,
                 x, y, z, 1, 0.08, 0.08, 0.08, 0.01);
+    }
+
+    private static net.minecraft.world.scores.PlayerTeam getOrCreateTeam(
+            net.minecraft.world.scores.Scoreboard scoreboard, String name,
+            net.minecraft.ChatFormatting color) {
+        net.minecraft.world.scores.PlayerTeam team = scoreboard.getPlayerTeam(name);
+        if (team == null) {
+            team = scoreboard.addPlayerTeam(name);
+            team.setColor(color);
+        }
+        return team;
     }
 
     private static void checkAdvancement(ServerPlayer player, ISacredArtist data) {

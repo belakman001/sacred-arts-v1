@@ -46,6 +46,18 @@ public class ModNetwork {
                 ToggleCopperSightPacket::encode,
                 ToggleCopperSightPacket::new,
                 ToggleCopperSightPacket::handle);
+        CHANNEL.registerMessage(id++, ToggleJadeSensePacket.class,
+                ToggleJadeSensePacket::encode,
+                ToggleJadeSensePacket::new,
+                ToggleJadeSensePacket::handle);
+        CHANNEL.registerMessage(id++, RequestSpiritScanPacket.class,
+                RequestSpiritScanPacket::encode,
+                RequestSpiritScanPacket::new,
+                RequestSpiritScanPacket::handle);
+        CHANNEL.registerMessage(id++, SpiritScanResultPacket.class,
+                SpiritScanResultPacket::encode,
+                SpiritScanResultPacket::new,
+                SpiritScanResultPacket::handle);
     }
 
     /** Push the player's full sacred artist state to their client. */

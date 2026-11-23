@@ -58,6 +58,10 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     boolean isCopperSightEnabled();
     void setCopperSightEnabled(boolean enabled);
 
+    /** Jade spiritual sense: see living things through walls (Jade stage+). */
+    boolean isJadeSenseEnabled();
+    void setJadeSenseEnabled(boolean enabled);
+
     /** Black Flame striker charge-up: ticks remaining, 0 = not charging. */
     int getStrikerChargeTicks();
     void setStrikerChargeTicks(int ticks);

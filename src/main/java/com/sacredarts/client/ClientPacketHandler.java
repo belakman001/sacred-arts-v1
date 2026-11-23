@@ -15,7 +15,15 @@ public class ClientPacketHandler {
                 msg.getMadra(), msg.getMaxMadra(), msg.getMastery(), msg.getKills(),
                 msg.getCycledTotal(), msg.getIronBodyId(), msg.hasGoldsign(),
                 msg.isCycling(), msg.getLevel(), msg.getLevelXp(), msg.getXpForNext(),
-                msg.getStageMaxLevel(), msg.isCopperSightEnabled());
+                msg.getStageMaxLevel(), msg.isCopperSightEnabled(), msg.isJadeSenseEnabled());
+    }
+
+    /** Server answered a Spirit Scan: show the readout briefly. */
+    public static void spiritScanResult(String text) {
+        Minecraft mc = Minecraft.getInstance();
+        ClientData.scanText = text;
+        ClientData.scanExpiryTick = mc.level == null
+                ? 0 : mc.level.getGameTime() + 40;
     }
 
     /** Right-click with the Foundation Manual: choose a Path, or review stats if enrolled. */

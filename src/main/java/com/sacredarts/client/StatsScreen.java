@@ -86,6 +86,11 @@ public class StatsScreen extends Screen {
         y = line(g, x, y, label("stats.sacredarts.copper_sight") + ": "
                 + label(ClientData.copperSightEnabled ? "stats.sacredarts.yes" : "stats.sacredarts.no")
                 + " §7(G)");
+        if (stage.atLeast(Stage.JADE)) {
+            y = line(g, x, y, label("stats.sacredarts.jade_sense") + ": "
+                    + label(ClientData.jadeSenseEnabled ? "stats.sacredarts.yes" : "stats.sacredarts.no")
+                    + " §7(J)");
+        }
         y += 8;
 
         y = line(g, x, y, "§l" + label("stats.sacredarts.to_advance"));

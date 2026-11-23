@@ -16,6 +16,7 @@ public class KeyBindings {
     public static KeyMapping CYCLE;
     public static KeyMapping MENU;
     public static KeyMapping COPPER_SIGHT;
+    public static KeyMapping JADE_SENSE;
 
     public static void registerAll(RegisterKeyMappingsEvent event) {
         TECH_1 = new KeyMapping("key.sacredarts.technique_1", KeyConflictContext.IN_GAME,
@@ -32,6 +33,8 @@ public class KeyBindings {
                 InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
         COPPER_SIGHT = new KeyMapping("key.sacredarts.copper_sight", KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
+        JADE_SENSE = new KeyMapping("key.sacredarts.jade_sense", KeyConflictContext.IN_GAME,
+                InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
         event.register(TECH_1);
         event.register(TECH_2);
         event.register(TECH_3);
@@ -39,5 +42,6 @@ public class KeyBindings {
         event.register(CYCLE);
         event.register(MENU);
         event.register(COPPER_SIGHT);
+        event.register(JADE_SENSE);
     }
 }
