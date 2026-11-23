@@ -28,6 +28,8 @@ public class SacredArtist implements ISacredArtist {
     private int swordAuraTicks = 0;
     private int armorTicks = 0;
     private int silenceTicks = 0;
+    private int ironBodyCooldownTicks = 0;
+    private int oakheartRootTicks = 0;
 
     @Override public boolean isEnrolled() { return enrolled; }
 
@@ -121,6 +123,10 @@ public class SacredArtist implements ISacredArtist {
     @Override public void setArmorTicks(int ticks) { this.armorTicks = Math.max(0, ticks); }
     @Override public int getSilenceTicks() { return silenceTicks; }
     @Override public void setSilenceTicks(int ticks) { this.silenceTicks = Math.max(0, ticks); }
+    @Override public int getIronBodyCooldownTicks() { return ironBodyCooldownTicks; }
+    @Override public void setIronBodyCooldownTicks(int ticks) { this.ironBodyCooldownTicks = Math.max(0, ticks); }
+    @Override public int getOakheartRootTicks() { return oakheartRootTicks; }
+    @Override public void setOakheartRootTicks(int ticks) { this.oakheartRootTicks = Math.max(0, ticks); }
 
     @Override
     public CompoundTag serializeNBT() {
@@ -147,6 +153,8 @@ public class SacredArtist implements ISacredArtist {
         tag.putInt("swordAuraTicks", swordAuraTicks);
         tag.putInt("armorTicks", armorTicks);
         tag.putInt("silenceTicks", silenceTicks);
+        tag.putInt("ironBodyCooldownTicks", ironBodyCooldownTicks);
+        tag.putInt("oakheartRootTicks", oakheartRootTicks);
         return tag;
     }
 
@@ -174,6 +182,8 @@ public class SacredArtist implements ISacredArtist {
         swordAuraTicks = tag.getInt("swordAuraTicks");
         armorTicks = tag.getInt("armorTicks");
         silenceTicks = tag.getInt("silenceTicks");
+        ironBodyCooldownTicks = tag.getInt("ironBodyCooldownTicks");
+        oakheartRootTicks = tag.getInt("oakheartRootTicks");
         cycling = false;
     }
 

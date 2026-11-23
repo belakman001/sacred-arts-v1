@@ -58,6 +58,10 @@ public class ModNetwork {
                 SpiritScanResultPacket::encode,
                 SpiritScanResultPacket::new,
                 SpiritScanResultPacket::handle);
+        CHANNEL.registerMessage(id++, IronBodyActivePacket.class,
+                IronBodyActivePacket::encode,
+                IronBodyActivePacket::new,
+                IronBodyActivePacket::handle);
     }
 
     /** Push the player's full sacred artist state to their client. */

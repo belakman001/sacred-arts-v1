@@ -26,6 +26,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -107,6 +108,17 @@ public class SacredArts {
                 }
             });
         }
+    }
+
+    /** Oakheart Deep Roots: rooted players cannot be knocked back. */
+    @SubscribeEvent
+    public void onLivingKnockBack(LivingKnockBackEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+        sp.getCapability(ModCapabilities.SACRED_ARTIST).ifPresent(data -> {
+            if (data.getOakheartRootTicks() > 0) {
+                event.setCanceled(true);
+            }
+        });
     }
 
     @SubscribeEvent

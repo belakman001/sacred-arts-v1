@@ -93,4 +93,12 @@ public interface ISacredArtist extends INBTSerializable<CompoundTag> {
     /** Hollow Domain: ticks during which technique casting is blocked. */
     int getSilenceTicks();
     void setSilenceTicks(int ticks);
+
+    /** Iron Body active cooldown, in ticks. 0 = ready. */
+    int getIronBodyCooldownTicks();
+    void setIronBodyCooldownTicks(int ticks);
+
+    /** Oakheart Deep Roots: ticks of knockback immunity remaining. */
+    int getOakheartRootTicks();
+    void setOakheartRootTicks(int ticks);
 }

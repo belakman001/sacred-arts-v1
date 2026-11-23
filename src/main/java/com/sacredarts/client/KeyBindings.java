@@ -17,6 +17,7 @@ public class KeyBindings {
     public static KeyMapping MENU;
     public static KeyMapping COPPER_SIGHT;
     public static KeyMapping JADE_SENSE;
+    public static KeyMapping IRON_BODY;
 
     public static void registerAll(RegisterKeyMappingsEvent event) {
         TECH_1 = new KeyMapping("key.sacredarts.technique_1", KeyConflictContext.IN_GAME,
@@ -35,6 +36,8 @@ public class KeyBindings {
                 InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
         JADE_SENSE = new KeyMapping("key.sacredarts.jade_sense", KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
+        IRON_BODY = new KeyMapping("key.sacredarts.iron_body", KeyConflictContext.IN_GAME,
+                InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F, CATEGORY);
         event.register(TECH_1);
         event.register(TECH_2);
         event.register(TECH_3);
@@ -43,5 +46,6 @@ public class KeyBindings {
         event.register(MENU);
         event.register(COPPER_SIGHT);
         event.register(JADE_SENSE);
+        event.register(IRON_BODY);
     }
 }

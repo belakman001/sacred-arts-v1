@@ -7,6 +7,7 @@ import com.sacredarts.aura.AuraType;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.network.CastTechniquePacket;
 import com.sacredarts.network.CyclePacket;
+import com.sacredarts.network.IronBodyActivePacket;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.network.RequestSpiritScanPacket;
 import com.sacredarts.network.ToggleCopperSightPacket;
@@ -81,6 +82,9 @@ public class ClientEvents {
             }
             if (KeyBindings.JADE_SENSE.consumeClick()) {
                 ModNetwork.CHANNEL.sendToServer(new ToggleJadeSensePacket());
+            }
+            if (KeyBindings.IRON_BODY.consumeClick()) {
+                ModNetwork.CHANNEL.sendToServer(new IronBodyActivePacket());
             }
         }
 

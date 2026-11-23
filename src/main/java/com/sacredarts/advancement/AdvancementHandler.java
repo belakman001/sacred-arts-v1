@@ -152,6 +152,31 @@ public class AdvancementHandler {
             data.setSilenceTicks(data.getSilenceTicks() - 1);
         }
 
+        // Iron Body active cooldowns.
+        if (data.getIronBodyCooldownTicks() > 0) {
+            data.setIronBodyCooldownTicks(data.getIronBodyCooldownTicks() - 1);
+        }
+        if (data.getOakheartRootTicks() > 0) {
+            data.setOakheartRootTicks(data.getOakheartRootTicks() - 1);
+        }
+
+        // Oakheart Iron Body: +2 hearts of maximum health, applied lazily
+        // (and removed again if the body is ever changed by a reroll).
+        if (time % 20 == 0) {
+            var attr = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+            if (attr != null) {
+                java.util.UUID oakId = java.util.UUID.fromString("3f8e1a2b-7c4d-4a9e-8b1f-5d6a7c8e9f01");
+                boolean has = attr.getModifier(oakId) != null;
+                if (data.getIronBody() == IronBody.OAKHEART && !has) {
+                    attr.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(
+                            oakId, "sacredarts:oakheart", 4.0,
+                            net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION));
+                } else if (data.getIronBody() != IronBody.OAKHEART && has) {
+                    attr.removeModifier(oakId);
+                }
+            }
+        }
+
         // Sandviper: immune to poison.
         if (data.getPath() == com.sacredarts.path.Path.SANDVIPER) {
             player.removeEffect(net.minecraft.world.effect.MobEffects.POISON);

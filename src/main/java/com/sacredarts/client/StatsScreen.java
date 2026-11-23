@@ -80,7 +80,8 @@ public class StatsScreen extends Screen {
         y = line(g, x, y, label("stats.sacredarts.mastery") + ": " + ClientData.mastery
                 + "    " + label("stats.sacredarts.kills") + ": " + ClientData.kills);
         y = line(g, x, y, label("stats.sacredarts.iron_body") + ": "
-                + IronBody.byId(ClientData.ironBodyId).getDisplayName().getString());
+                + IronBody.byId(ClientData.ironBodyId).getDisplayName().getString()
+                + (ClientData.ironBodyId.equals("none") ? "" : " §7(F)"));
         y = line(g, x, y, label("stats.sacredarts.goldsign") + ": "
                 + label(ClientData.goldsign ? "stats.sacredarts.yes" : "stats.sacredarts.no"));
         y = line(g, x, y, label("stats.sacredarts.copper_sight") + ": "
