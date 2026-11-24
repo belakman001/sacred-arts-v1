@@ -117,6 +117,14 @@ Twin Stars as an advanced dual-core mechanic.
 
 ## Structures
 
+- **Abandoned Shrine** (built by Kaleb, 7x8x8, mossy stone brick/cobble) — spawns in
+  forests (random spread, spacing 18, separation 6). A chiseled bookshelf holds the
+  Foundation Manual (written in by a structure processor at generation — the Structure
+  Block save kept only the "slot occupied" flag, not the placeholder book's item data),
+  and a chest rolls the shrine loot table (Madra Pills, Remnant Core, Aura Vial,
+  glow berries, amethyst, gold, books). Open idea: taking the manual triggers something
+  via the bookshelf's redstone signal (light the rune circle, hidden compartment,
+  guardian Remnant).
 - **Ruined shrines** (loot: manuals, pills), **Ninecloud-style vault** (rare loot),
   **Labyrinth entrance** (v2 dungeon).
 
@@ -176,6 +184,8 @@ v0.10 changes (2026-11-23): Copper Sight reveals the hidden world — vital aura
 v0.11 changes (2026-11-23): Iron Body actives (F key). Bloodforged Blood Surge: 15 madra, heal 6, 15s cooldown. Raindrop Rain Step: 10 madra, forward dash + Speed II, 8s cooldown. Oakheart Deep Roots: 10 madra, 6s knockback immunity (LivingKnockBackEvent cancel) + Resistance II, 15s cooldown. Oakheart's +2 hearts of max health is now actually applied (permanent MAX_HEALTH attribute modifier — it was described but never implemented). Iron Body active shown in the stats menu with an (F) hint.
 
 v0.12 changes (2026-11-23): Vital aura is now a real resource (0-100, gold bar under the madra bar, shown in the stats menu). Cycling in a biome that breathes your Path's aura types draws it in (+2/s, small madra trickle, motes streaming into the caster). Path affinities: Black Flame Fire+Destruction, Twin Stars Light+Force, Endless Sword Sword+Force, Hollow King Shadow+Force, White Fox Light+Dream, Sandviper Blood+Life. Aura Vial (glass bottle + amethyst shard): bottle 25 stored aura; Filled Aura Vial drinks back +25 aura and +20 madra, returns the empty vial. Remnants: slain hostile mobs have a 40% chance to leave a ghostly spirit that drifts where it died for ~60s (colored by mob type, attackable, 20 HP). Cycling near one absorbs it: +10 madra, +2 mastery, +5 XP. Foundations for Gold+ are now in place: aura feeds soulfire, Remnants feed advancement and binding.
+
+Unreleased (2026-11-24): Abandoned Shrine — Kaleb's own build (7x8x8, mossy stone brick/cobble, moss carpet, lantern, bookshelves), now generating in forests. A structure processor puts a real Foundation Manual into slot 1 of the chiseled bookshelf at generation and attaches the shrine loot table to the chest. Sacred Beast contracts are beast-specific (Fox: cycle near until accepted; Serpent: duel; Crane: catch and feed; Tortoise: Orthos-like Black Flame, horse-sized and rideable — cycle beside him to a threshold, then ride and tame). Remnant strength is now relative to the player (same level: Weak/passive; player stronger: it flees; Remnant stronger: Strong/hostile); Sacred Beasts and Wandering Sacred Artists always leave a Remnant at Jade+. Vanilla mobs will be replaced gradually by dread beasts and Wandering Sacred Artists.
 
 ## Technical notes (Forge 1.20.1)
 

@@ -9,6 +9,7 @@ import com.sacredarts.data.SacredArtistProvider;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.item.ModItems;
 import com.sacredarts.network.ModNetwork;
+import com.sacredarts.worldgen.ShrineBookshelfProcessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -79,6 +80,7 @@ public class SacredArts {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         ModEntities.TYPES.register(modEventBus);
+        ShrineBookshelfProcessor.TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         ModNetwork.register();
