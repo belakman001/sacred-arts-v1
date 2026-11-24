@@ -34,7 +34,9 @@ public class ShrineBookshelfProcessor extends StructureProcessor {
             DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, SacredArts.MODID);
 
     public static final RegistryObject<StructureProcessorType<ShrineBookshelfProcessor>> SHRINE_BOOKSHELF =
-            TYPES.register("shrine_bookshelf", () -> new StructureProcessorType<>(CODEC));
+            // In 1.20.1 StructureProcessorType is an abstract class, not a record,
+            // so it needs the anonymous subclass (the record form came in 1.20.2).
+            TYPES.register("shrine_bookshelf", () -> new StructureProcessorType<>(CODEC) {});
 
     private static final ResourceLocation CHEST_LOOT =
             new ResourceLocation(SacredArts.MODID, "chests/abandoned_shrine");

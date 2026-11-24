@@ -128,8 +128,9 @@ public class SacredArts {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         // Slain hostile mobs sometimes leave a Remnant behind.
-        if (event.getEntity() instanceof Enemy
-                && event.getEntity() instanceof net.minecraft.world.entity.LivingEntity dead
+        // (LivingDeathEvent's entity is already a LivingEntity, so no pattern needed.)
+        net.minecraft.world.entity.LivingEntity dead = event.getEntity();
+        if (dead instanceof Enemy
                 && dead.level() instanceof net.minecraft.server.level.ServerLevel serverLevel
                 && dead.getRandom().nextFloat() < 0.4f) {
             com.sacredarts.entity.RemnantEntity.spawnFor(serverLevel, dead);

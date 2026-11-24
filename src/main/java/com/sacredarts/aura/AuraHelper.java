@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 /**
  * Where vital aura lives: which aura types a biome breathes, and which aura
@@ -84,7 +84,7 @@ public class AuraHelper {
     }
 
     /** Pick one of the biome's aura types at random — for drifting motes. */
-    public static AuraType randomBiomeAura(Level level, BlockPos pos, Random random) {
+    public static AuraType randomBiomeAura(Level level, BlockPos pos, RandomSource random) {
         AuraType[] auras = getBiomeAuras(level, pos);
         return auras[random.nextInt(auras.length)];
     }
