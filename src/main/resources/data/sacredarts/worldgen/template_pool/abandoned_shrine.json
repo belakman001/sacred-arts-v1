@@ -1,1 +1,1 @@
-{"elements":[{"element":{"element_type":"minecraft:single_pool_element","location":"sacredarts:abandoned_shrine","processors":"sacredarts:shrine_bookshelf","projection":"rigid"},"weight":1}],"fallback":"minecraft:empty","name":"sacredarts:abandoned_shrine"}
+{"elements":[{"element":{"element_type":"minecraft:single_pool_element","location":"sacredarts:abandoned_shrine","processors":"sacredarts:shrine_bookshelf","projection":"rigid"},"weight":1}],"fallback":"minecraft:empty"}
