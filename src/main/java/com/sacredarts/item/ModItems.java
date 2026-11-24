@@ -20,4 +20,18 @@ public class ModItems {
             ITEMS.register("aura_vial", AuraVialItem::new);
     public static final RegistryObject<Item> FILLED_AURA_VIAL =
             ITEMS.register("filled_aura_vial", FilledAuraVialItem::new);
+
+    // Colored Remnant Cores (Sav's art). Plain items for now — no job yet.
+    // Earmarked as Soul Smithing material: crafting special items, tools,
+    // and weapons. That system is still just an idea, not designed.
+    public static final RegistryObject<Item> REMNANT_CORE_BLACK =
+            ITEMS.register("remnant_core_black", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> REMNANT_CORE_GOLD =
+            ITEMS.register("remnant_core_gold", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> REMNANT_CORE_RED =
+            ITEMS.register("remnant_core_red", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> REMNANT_CORE_BLUE =
+            ITEMS.register("remnant_core_blue", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> REMNANT_CORE_LIGHT_GREEN =
+            ITEMS.register("remnant_core_light_green", () -> new Item(new Item.Properties()));
 }

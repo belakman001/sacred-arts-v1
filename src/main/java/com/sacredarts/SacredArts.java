@@ -68,6 +68,11 @@ public class SacredArts {
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.FOUNDATION_MANUAL.get());
                         output.accept(ModItems.REMNANT_CORE.get());
+                        output.accept(ModItems.REMNANT_CORE_BLACK.get());
+                        output.accept(ModItems.REMNANT_CORE_GOLD.get());
+                        output.accept(ModItems.REMNANT_CORE_RED.get());
+                        output.accept(ModItems.REMNANT_CORE_BLUE.get());
+                        output.accept(ModItems.REMNANT_CORE_LIGHT_GREEN.get());
                         output.accept(ModItems.MADRA_PILL.get());
                         output.accept(ModItems.AURA_VIAL.get());
                         output.accept(ModItems.FILLED_AURA_VIAL.get());

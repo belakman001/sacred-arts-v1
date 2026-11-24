@@ -139,6 +139,9 @@ Twin Stars as an advanced dual-core mechanic.
 
 - Foundation Manual (enroll), Remnant Core (reroll Path), Madra Pills (restore madra /
   boost cycling), Iron Body Reset? — **no** (Iron Body is permanent by design).
+- **Soul Smithing** (idea, Nov 24 — not designed yet): craft special items, tools, and
+  weapons from colored Remnant Cores (black, gold, red, blue, light green). The cores
+  are in-game as plain items for now, awaiting the design.
 
 ## Multiplayer
 
