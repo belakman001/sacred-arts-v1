@@ -40,5 +40,5 @@ public class ModItems {
     /** Sacred Fox spawn egg — white with purple spots, matching Kaleb's fox. */
     public static final RegistryObject<Item> SACRED_FOX_SPAWN_EGG =
             ITEMS.register("sacred_fox_spawn_egg", () -> new SpawnEggItem(
-                    ModEntities.SACRED_FOX, 0xF5F5F5, 0x966EB0, new Item.Properties()));
+                    ModEntities.SACRED_FOX.get(), 0xF5F5F5, 0x966EB0, new Item.Properties()));
 }
