@@ -50,4 +50,12 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .updateInterval(1)
                     .build("remnant"));
+
+    /** The Sacred White Fox: Kaleb's Blockbench model, white with purple markings, three tails. */
+    public static final RegistryObject<EntityType<SacredFoxEntity>> SACRED_FOX =
+            TYPES.register("sacred_fox", () -> EntityType.Builder
+                    .<SacredFoxEntity>of(SacredFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.6F, 0.7F)
+                    .clientTrackingRange(10)
+                    .build("sacred_fox"));
 }

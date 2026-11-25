@@ -3,15 +3,21 @@ package com.sacredarts.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.sacredarts.SacredArts;
 import com.sacredarts.advancement.Stage;
 import com.sacredarts.data.ModCapabilities;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.path.Path;
+import com.sacredarts.worldgen.ShrineBookshelfProcessor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 
 import java.util.Arrays;
 
@@ -84,6 +90,27 @@ public class SacredArtsCommand {
                                                 "message.sacredarts.stage_up", s.getDisplayName()));
                                     });
                                     return 1;
-                                }))));
+                                })))
+                .then(Commands.literal("shrine").executes(ctx -> {
+                    // Debug: drop the Abandoned Shrine right where you stand, so
+                    // you can see it without hunting for a worldgen spawn.
+                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                    ServerLevel level = player.serverLevel();
+                    var template = level.getStructureManager()
+                            .get(new ResourceLocation(SacredArts.MODID, "abandoned_shrine"));
+                    if (template.isEmpty()) {
+                        player.sendSystemMessage(Component.literal(
+                                "[SacredArts] Shrine template not found."));
+                        return 0;
+                    }
+                    BlockPos pos = player.blockPosition();
+                    boolean ok = template.get().placeInWorld(level, pos, pos,
+                            new StructurePlaceSettings().addProcessor(new ShrineBookshelfProcessor()),
+                            player.getRandom(), 2);
+                    player.sendSystemMessage(Component.literal(ok
+                            ? "[SacredArts] Shrine placed at your feet."
+                            : "[SacredArts] Shrine placement failed."));
+                    return ok ? 1 : 0;
+                })));
     }
 }

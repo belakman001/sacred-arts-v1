@@ -16,6 +16,8 @@
   "item.sacredarts.remnant_core_light_green": "Light Green Remnant Core",
   "item.sacredarts.aura_vial": "Aura Vial",
   "item.sacredarts.filled_aura_vial": "Filled Aura Vial",
+  "item.sacredarts.sacred_fox_spawn_egg": "Sacred Fox Spawn Egg",
+  "entity.sacredarts.sacred_fox": "Sacred Fox",
   "message.sacredarts.not_enough_aura": "Not enough stored vital aura — cycle where your Path's aura is strong to gather more.",
   "message.sacredarts.aura_full": "Your aura and madra are already full.",
   "message.sacredarts.remnant_absorbed": "Remnant absorbed — its spirit feeds your Path.",

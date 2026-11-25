@@ -76,6 +76,7 @@ public class SacredArts {
                         output.accept(ModItems.MADRA_PILL.get());
                         output.accept(ModItems.AURA_VIAL.get());
                         output.accept(ModItems.FILLED_AURA_VIAL.get());
+                        output.accept(ModItems.SACRED_FOX_SPAWN_EGG.get());
                     })
                     .build());
 
@@ -90,6 +91,7 @@ public class SacredArts {
 
         ModNetwork.register();
         context.registerConfig(ModConfig.Type.COMMON, SacredArtsConfig.SPEC);
+        modEventBus.addListener(this::onRegisterAttributes);
 
         MinecraftForge.EVENT_BUS.register(this);
         // NOTE: the filter must be Entity.class, not Player.class — Forge fires
@@ -98,6 +100,11 @@ public class SacredArts {
         MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, this::onAttachCapabilities);
 
         LOGGER.info("Sacred Arts stirs. The Way opens.");
+    }
+
+    /** The fox is the mod's first Mob — its attributes must be registered or it crashes on spawn. */
+    private void onRegisterAttributes(net.minecraftforge.event.entity.EntityAttributeCreationEvent event) {
+        event.put(ModEntities.SACRED_FOX.get(), com.sacredarts.entity.SacredFoxEntity.createAttributes().build());
     }
 
     private void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {

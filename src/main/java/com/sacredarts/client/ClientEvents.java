@@ -4,6 +4,9 @@ import com.sacredarts.SacredArts;
 import com.sacredarts.advancement.Stage;
 import com.sacredarts.aura.AuraHelper;
 import com.sacredarts.aura.AuraType;
+import com.sacredarts.client.ClientPacketHandler;
+import com.sacredarts.client.SacredFoxModel;
+import com.sacredarts.client.SacredFoxRenderer;
 import com.sacredarts.entity.ModEntities;
 import com.sacredarts.network.CastTechniquePacket;
 import com.sacredarts.network.CyclePacket;
@@ -44,12 +47,18 @@ public class ClientEvents {
         }
 
         @SubscribeEvent
+        public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+            event.registerLayerDefinition(SacredFoxModel.LAYER_LOCATION, SacredFoxModel::createBodyLayer);
+        }
+
+        @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.FORGED_WISP.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.FIRE_FIST.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.BLADE.get(), ParticleOnlyRenderer::new);
             event.registerEntityRenderer(ModEntities.NEEDLE.get(), ThrownItemRenderer::new);
             event.registerEntityRenderer(ModEntities.REMNANT.get(), ParticleOnlyRenderer::new);
+            event.registerEntityRenderer(ModEntities.SACRED_FOX.get(), SacredFoxRenderer::new);
         }
     }
 
