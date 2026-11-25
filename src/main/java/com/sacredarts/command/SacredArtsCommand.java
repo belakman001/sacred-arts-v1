@@ -113,11 +113,35 @@ public class SacredArtsCommand {
                     boolean ok = template.get().placeInWorld(level, pos, pos,
                             new StructurePlaceSettings().addProcessor(new ShrineBookshelfProcessor()),
                             player.getRandom(), 2);
-                    player.sendSystemMessage(Component.literal(ok
-                            ? "[SacredArts] Shrine placed on the ground at "
-                                    + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "."
-                            : "[SacredArts] Shrine placement failed."));
-                    return ok ? 1 : 0;
+                    if (!ok) {
+                        player.sendSystemMessage(Component.literal(
+                                "[SacredArts] Shrine placement failed."));
+                        return 0;
+                    }
+                    // Prove the blocks are really there: count the solid blocks
+                    // in the 7x8x8 region we just placed (the template holds 98).
+                    // Then drop the player on the ground just outside the shrine
+                    // so there's no hunting — if the count is ~98 and he still
+                    // can't see it, the placement itself is broken, not his eyes.
+                    var size = template.get().getSize();
+                    int solid = 0;
+                    for (int dx = 0; dx < size.getX(); dx++) {
+                        for (int dy = 0; dy < size.getY(); dy++) {
+                            for (int dz = 0; dz < size.getZ(); dz++) {
+                                if (!level.getBlockState(pos.offset(dx, dy, dz)).isAir()) {
+                                    solid++;
+                                }
+                            }
+                        }
+                    }
+                    BlockPos view = level.getHeightmapPos(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR_WG,
+                            pos.offset(-3, 0, -3));
+                    player.teleportTo(view.getX() + 0.5, view.getY() + 1, view.getZ() + 0.5);
+                    player.sendSystemMessage(Component.literal(
+                            "[SacredArts] Shrine placed at " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ()
+                                    + " — " + solid + " solid blocks in place. You're standing just outside it."));
+                    return 1;
                 })));
     }
 }
