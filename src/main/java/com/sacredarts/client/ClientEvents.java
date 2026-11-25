@@ -130,7 +130,7 @@ public class ClientEvents {
                     double x = center.x + (mc.player.getRandom().nextDouble() - 0.5) * 10;
                     double y = center.y + mc.player.getRandom().nextDouble() * 2.5;
                     double z = center.z + (mc.player.getRandom().nextDouble() - 0.5) * 10;
-                    AuraType aura = AuraHelper.randomBiomeAura(mc.level, pos, mc.player.getRandom());
+                    AuraType aura = AuraHelper.randomAmbientAura(mc.level, mc.player, mc.player.getRandom());
                     double vx = 0, vy = 0.01, vz = 0;
                     if (ClientData.cycling) {
                         // Motes stream into the caster while cycling.

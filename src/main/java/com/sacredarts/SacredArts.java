@@ -2,11 +2,13 @@ package com.sacredarts;
 
 import com.mojang.logging.LogUtils;
 import com.sacredarts.advancement.AdvancementHandler;
+import com.sacredarts.aura.AuraHelper;
 import com.sacredarts.command.SacredArtsCommand;
 import com.sacredarts.config.SacredArtsConfig;
 import com.sacredarts.data.ModCapabilities;
 import com.sacredarts.data.SacredArtistProvider;
 import com.sacredarts.entity.ModEntities;
+import com.sacredarts.item.GuideBook;
 import com.sacredarts.item.ModItems;
 import com.sacredarts.network.ModNetwork;
 import com.sacredarts.worldgen.ShrineBookshelfProcessor;
@@ -29,6 +31,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -171,7 +174,15 @@ public class SacredArts {
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer sp) {
             ModNetwork.syncPlayer(sp);
+            GuideBook.giveIfFirstLogin(sp);
         }
+    }
+
+    /** An explosion flares Destruction aura at the site, lingering 10 seconds. */
+    @SubscribeEvent
+    public void onExplosion(ExplosionEvent.Detonate event) {
+        if (event.getLevel().isClientSide()) return;
+        AuraHelper.recordExplosion(event.getLevel(), event.getExplosion().getPosition());
     }
 
     @SubscribeEvent

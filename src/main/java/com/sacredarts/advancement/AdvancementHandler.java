@@ -387,10 +387,13 @@ public class AdvancementHandler {
     /**
      * Cycling in a biome that breathes your Path's aura draws it in: stored
      * vital aura grows, with a small madra trickle and motes streaming in.
+     * The moment counts too — a matching aura from combat, a village night,
+     * the high air, a blade in hand or a fresh explosion feeds you the same
+     * way. A better sword feeds an Endless Sword artist more.
      */
     private static void absorbAura(ServerPlayer player, ISacredArtist data, double max) {
         com.sacredarts.aura.AuraType[] biomeAuras =
-                com.sacredarts.aura.AuraHelper.getBiomeAuras(player.serverLevel(), player.blockPosition());
+                com.sacredarts.aura.AuraHelper.getAmbientAuras(player.serverLevel(), player);
         com.sacredarts.aura.AuraType match = null;
         outer:
         for (com.sacredarts.aura.AuraType a : biomeAuras) {
@@ -402,7 +405,9 @@ public class AdvancementHandler {
             }
         }
         if (match == null) return;
-        data.addAura(2);
+        int swordBonus = match == com.sacredarts.aura.AuraType.SWORD
+                ? com.sacredarts.aura.AuraHelper.getSwordTier(player) : 0;
+        data.addAura(2 + swordBonus);
         data.setMadra(data.getMadra() + max * 0.02);
         for (int i = 0; i < 6; i++) {
             double ang = player.getRandom().nextDouble() * Math.PI * 2;
