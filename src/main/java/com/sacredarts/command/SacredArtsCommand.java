@@ -94,6 +94,10 @@ public class SacredArtsCommand {
                 .then(Commands.literal("shrine").executes(ctx -> {
                     // Debug: drop the Abandoned Shrine right where you stand, so
                     // you can see it without hunting for a worldgen spawn.
+                    // It lands on the ground (OCEAN_FLOOR heightmap, the same
+                    // ground the worldgen shrine sits on), not at your altitude
+                    // — placing it at y=99 while flying left a shrine floating
+                    // in the sky that was easy to miss.
                     ServerPlayer player = ctx.getSource().getPlayerOrException();
                     ServerLevel level = player.serverLevel();
                     var template = level.getStructureManager()
@@ -103,12 +107,15 @@ public class SacredArtsCommand {
                                 "[SacredArts] Shrine template not found."));
                         return 0;
                     }
-                    BlockPos pos = player.blockPosition();
+                    BlockPos feet = player.blockPosition();
+                    BlockPos pos = level.getHeightmapPos(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR_WG, feet);
                     boolean ok = template.get().placeInWorld(level, pos, pos,
                             new StructurePlaceSettings().addProcessor(new ShrineBookshelfProcessor()),
                             player.getRandom(), 2);
                     player.sendSystemMessage(Component.literal(ok
-                            ? "[SacredArts] Shrine placed at your feet."
+                            ? "[SacredArts] Shrine placed on the ground at "
+                                    + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "."
                             : "[SacredArts] Shrine placement failed."));
                     return ok ? 1 : 0;
                 })));
