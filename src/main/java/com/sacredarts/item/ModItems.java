@@ -3,7 +3,7 @@ package com.sacredarts.item;
 import com.sacredarts.SacredArts;
 import com.sacredarts.entity.ModEntities;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -37,8 +37,14 @@ public class ModItems {
     public static final RegistryObject<Item> REMNANT_CORE_LIGHT_GREEN =
             ITEMS.register("remnant_core_light_green", () -> new Item(new Item.Properties()));
 
-    /** Sacred Fox spawn egg — white with purple spots, matching Kaleb's fox. */
+    /**
+     * Sacred Fox spawn egg — white with purple spots, matching Kaleb's fox.
+     * ForgeSpawnEggItem takes the RegistryObject as a Supplier, so the fox
+     * entity type is only resolved when the egg is actually used — calling
+     * .get() here crashed the game at launch (0.14.0), because items
+     * register before entity types.
+     */
     public static final RegistryObject<Item> SACRED_FOX_SPAWN_EGG =
-            ITEMS.register("sacred_fox_spawn_egg", () -> new SpawnEggItem(
-                    ModEntities.SACRED_FOX.get(), 0xF5F5F5, 0x966EB0, new Item.Properties()));
+            ITEMS.register("sacred_fox_spawn_egg", () -> new ForgeSpawnEggItem(
+                    ModEntities.SACRED_FOX, 0xF5F5F5, 0x966EB0, new Item.Properties()));
 }
