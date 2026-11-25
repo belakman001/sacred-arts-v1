@@ -47,24 +47,31 @@ public class ShrineBookshelfProcessor extends StructureProcessor {
         return SHRINE_BOOKSHELF.get();
     }
 
+    // NOTE (2026-11-25): processBlock gets TWO block infos. blockInfo is the
+    // TEMPLATE-LOCAL one; relativeBlockInfo carries the WORLD position.
+    // placeInWorld uses the RETURNED info's pos() directly as the world
+    // position for setBlock — so returning blockInfo (local pos) silently
+    // placed every block at world coords 0..6, 0..7, 0..7 (near the origin,
+    // underground) instead of at the shrine. Always return relativeBlockInfo
+    // (or a new info built from its pos/state) — never blockInfo.
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos pos, BlockPos piecePos,
             StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo,
             StructurePlaceSettings settings) {
-        if (blockInfo.state().is(Blocks.CHISELED_BOOKSHELF)) {
+        if (relativeBlockInfo.state().is(Blocks.CHISELED_BOOKSHELF)) {
             CompoundTag manual = new ItemStack(ModItems.FOUNDATION_MANUAL.get()).save(new CompoundTag());
             manual.putByte("Slot", (byte) 1);
             ListTag items = new ListTag();
             items.add(manual);
             CompoundTag nbt = new CompoundTag();
             nbt.put("Items", items);
-            return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), blockInfo.state(), nbt);
+            return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), relativeBlockInfo.state(), nbt);
         }
-        if (blockInfo.state().is(Blocks.CHEST)) {
+        if (relativeBlockInfo.state().is(Blocks.CHEST)) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("LootTable", CHEST_LOOT.toString());
-            return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), blockInfo.state(), nbt);
+            return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), relativeBlockInfo.state(), nbt);
         }
-        return blockInfo;
+        return relativeBlockInfo;
     }
 }
